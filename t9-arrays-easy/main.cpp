@@ -255,7 +255,62 @@ void unionOfArray(vector<int> arr, int n, vector<int> temp, int m)
 //     printArr(res, res.size());
 // }
 
-int main()
+void findMissingNumber(vector<int> arr, int n)
+{
+    int sum = 0;
+    for (int i : arr)
+        sum += i;
+    cout << (n * (n + 1)) / 2 - sum << endl;
+}
+
+//? Using XOR
+// void findMissingNumber2(vector<int> nums, int n){
+//     int xor1 = 0, xor2 = 0;
+//     for (int i = 1; i <= n; i++)
+//         xor1 ^= i;
+//     for (int i = 0; i < n; i++)
+//         xor2 ^= nums[i];
+//     cout << (xor1 ^ xor2) << endl;
+// }
+
+void findMaximumConsecutiveOnes(vector<int> nums, int n)
+{
+    int consOnes = 0, res = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (nums[i] == 1)
+            consOnes++;
+        else
+            consOnes = 0;
+        res = max(res, consOnes);
+    }
+    cout << res << endl;
+}
+
+void findOddOneOut(vector<int> nums, int n)
+{
+    int xorNum = 0;
+    for (int i = 0; i < n; i++)
+        xorNum ^= nums[i];
+    cout << xorNum << endl;
+}
+
+void findLongestSubArrayOfSumK(vector<int>nums, int n, int k){
+    int cnt = 0;
+    for (int i = 0; i < n; i++)
+    {
+        int sum = arr[i];
+        int j = i+1;
+        while (sum <= k)
+        {
+            /* code */
+        }
+        
+    }
+}
+
+    int
+    main()
 {
     int n;
     cin >> n;
@@ -305,6 +360,22 @@ int main()
     // unionOfArray2(arr, n, temp, m);
     // unionOfArray3(arr, n, temp, m);
     cout << "----------------------" << endl;
-    
+    vector<int> nums = {1, 2, 3, 4, 5, 6, 7, 9};
+    printArr(nums, nums.size());
+    findMissingNumber(nums, 9);
+    // findMissingNumber2(nums, 9);
+    cout << "----------------------" << endl;
+    nums = {0, 1, 0, 1, 1, 1, 0, 0, 1, 1};
+    printArr(nums, nums.size());
+    findMaximumConsecutiveOnes(nums, nums.size());
+    cout << "----------------------" << endl;
+    nums = {4, 1, 2, 1, 2};
+    printArr(nums, nums.size());
+    findOddOneOut(nums, nums.size());
+    cout << "----------------------" << endl;
+    nums = {2, 3, 5, 1, 9};
+    printArr(nums, nums.size());
+    findLongestSubArrayOfSumK(nums, nums.size(), 10);
+    cout << "----------------------" << endl;
     return 0;
 }
