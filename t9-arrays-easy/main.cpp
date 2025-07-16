@@ -1,4 +1,6 @@
 #include <iostream>
+#include <map>
+#include <set>
 using namespace std;
 
 void printArr(vector<int> arr, int n)
@@ -80,15 +82,6 @@ void leftRotateByOne(vector<int> &arr, int n)
     arr[n - 1] = x;
 }
 
-//! Does LeftRotate K times
-// void leftRotateByK(vector<int> &arr, int n, int k)
-// {
-//     k %= n;
-//     while (k--)
-//     {
-//         leftRotateByOne(arr, n);
-//     }
-// }
 void leftRotateByK(vector<int> &arr, int n, int k)
 {
     k %= n;
@@ -96,6 +89,15 @@ void leftRotateByK(vector<int> &arr, int n, int k)
     reverse(arr.begin(), arr.begin() + k);
     reverse(arr.begin() + k, arr.end());
 }
+//? Does LeftRotateOne K times
+// void leftRotateByK2(vector<int> &arr, int n, int k)
+// {
+//     k %= n;
+//     while (k--)
+//     {
+//         leftRotateByOne(arr, n);
+//     }
+// }
 
 //! Has heap-buffer-overflow bug
 // void moveZeroes(vector<int> &arr, int n)
@@ -132,6 +134,127 @@ void moveZeroes(vector<int> &arr, int n)
     }
 }
 
+void findElement(vector<int> arr, int n, int num)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (arr[i] == num)
+        {
+            cout << i << endl;
+            return;
+        }
+    }
+    cout << -1 << endl;
+}
+
+void unionOfArray(vector<int> arr, int n, vector<int> temp, int m)
+{
+    sort(arr.begin(), arr.end());
+    sort(temp.begin(), temp.end());
+    int i = 0, j = 0;
+    while (i < n && j < m)
+    {
+        while (i < n && i > 0 && arr[i] == arr[i - 1])
+            i++;
+        while (j < m && j > 0 && temp[j] == temp[j - 1])
+            j++;
+
+        if (arr[i] < temp[j])
+        {
+            cout << arr[i] << " ";
+            i++;
+        }
+        else if (temp[j] < arr[i])
+        {
+            cout << temp[j] << " ";
+            j++;
+        }
+        else
+        {
+            cout << arr[i] << " ";
+            i++;
+            j++;
+        }
+    }
+    while (i < n)
+    {
+        if (i == 0 || arr[i] != arr[i - 1])
+            cout << arr[i] << " ";
+        i++;
+    }
+    while (j < m)
+    {
+        if (j == 0 || temp[j] != temp[j - 1])
+            cout << temp[j] << " ";
+        j++;
+    }
+    cout << endl;
+}
+
+//? Using MAP
+// void unionOfArray1(vector<int> arr1, int n, vector<int> arr2, int m)
+// {
+//     map<int, int> freq;
+//     for (int i = 0; i < n; i++)
+//         freq[arr1[i]]++;
+//     for (int i = 0; i < m; i++)
+//         freq[arr2[i]]++;
+//     for (auto &it : freq)
+//         cout << it.first << " ";
+//     cout << endl;
+// }
+
+//? Using SET
+// void unionOfArray2(vector<int> arr1, int n, vector<int> arr2, int m)
+// {
+//     set<int> res;
+//     for (int i = 0; i < n; i++)
+//         res.insert(arr1[i]);
+//     for (int i = 0; i < m; i++)
+//         res.insert(arr2[i]);
+//     for(int i : res)
+//         cout << i << " ";
+//     cout << endl;
+// }
+
+//? Using vector.back() to check for duplicated
+// void unionOfArray3(vector<int> arr, int n, vector<int> temp, int m)
+// {
+//     sort(arr.begin(), arr.end());
+//     sort(temp.begin(), temp.end());
+//     int i = 0, j = 0;
+//     vector<int> res;
+//     while (i < n && j < m)
+//     {
+
+//         if (arr[i] <= temp[j])
+//         {
+//             if (i == 0 || res.back() != arr[i])
+//                 res.push_back(arr[i]);
+//             i++;
+//         }
+//         else if (j == 0 || temp[j] < arr[i])
+//         {
+//             if (res.back() != temp[j])
+//                 res.push_back(temp[j]);
+//             j++;
+//         }
+//     }
+//     while (i < n)
+//     {
+//         if (i == 0 || res.back() != arr[i])
+//             res.push_back(arr[i]);
+//         i++;
+//     }
+//     while (j < m)
+//     {
+//         if (j == 0 || temp[j] != temp[j - 1])
+//             res.push_back(temp[j]);
+//         j++;
+//     }
+//     printArr(res, res.size());
+// }
+
 int main()
 {
     int n;
@@ -158,12 +281,30 @@ int main()
     cout << "----------------------" << endl;
     printArr(arr, n);
     leftRotateByK(arr, n, 3);
+    // leftRotateByK2(arr, n, 3);
     printArr(arr, n);
     cout << "----------------------" << endl;
     printArr(arr, n);
     moveZeroes(arr, n);
     printArr(arr, n);
     cout << "----------------------" << endl;
-
+    printArr(arr, n);
+    findElement(arr, n, 2);
+    cout << "----------------------" << endl;
+    int m;
+    cin >> m;
+    vector<int> temp(m);
+    for (int i = 0; i < m; i++)
+        cin >> temp[i];
+    printArr(arr, n);
+    cout << "        +        " << endl;
+    printArr(temp, m);
+    cout << "        =        " << endl;
+    unionOfArray(arr, n, temp, m);
+    // unionOfArray1(arr, n, temp, m);
+    // unionOfArray2(arr, n, temp, m);
+    // unionOfArray3(arr, n, temp, m);
+    cout << "----------------------" << endl;
+    
     return 0;
 }
