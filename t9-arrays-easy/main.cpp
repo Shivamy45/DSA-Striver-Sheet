@@ -90,14 +90,14 @@ void leftRotateByK(vector<int> &arr, int n, int k)
     reverse(arr.begin() + k, arr.end());
 }
 //? Does LeftRotateOne K times
-// void leftRotateByK2(vector<int> &arr, int n, int k)
-// {
-//     k %= n;
-//     while (k--)
-//     {
-//         leftRotateByOne(arr, n);
-//     }
-// }
+void leftRotateByK2(vector<int> &arr, int n, int k)
+{
+    k %= n;
+    while (k--)
+    {
+        leftRotateByOne(arr, n);
+    }
+}
 
 //! Has heap-buffer-overflow bug
 // void moveZeroes(vector<int> &arr, int n)
@@ -192,68 +192,68 @@ void unionOfArray(vector<int> arr, int n, vector<int> temp, int m)
 }
 
 //? Using MAP
-// void unionOfArray1(vector<int> arr1, int n, vector<int> arr2, int m)
-// {
-//     map<int, int> freq;
-//     for (int i = 0; i < n; i++)
-//         freq[arr1[i]]++;
-//     for (int i = 0; i < m; i++)
-//         freq[arr2[i]]++;
-//     for (auto &it : freq)
-//         cout << it.first << " ";
-//     cout << endl;
-// }
+void unionOfArray1(vector<int> arr1, int n, vector<int> arr2, int m)
+{
+    map<int, int> freq;
+    for (int i = 0; i < n; i++)
+        freq[arr1[i]]++;
+    for (int i = 0; i < m; i++)
+        freq[arr2[i]]++;
+    for (auto &it : freq)
+        cout << it.first << " ";
+    cout << endl;
+}
 
 //? Using SET
-// void unionOfArray2(vector<int> arr1, int n, vector<int> arr2, int m)
-// {
-//     set<int> res;
-//     for (int i = 0; i < n; i++)
-//         res.insert(arr1[i]);
-//     for (int i = 0; i < m; i++)
-//         res.insert(arr2[i]);
-//     for(int i : res)
-//         cout << i << " ";
-//     cout << endl;
-// }
+void unionOfArray2(vector<int> arr1, int n, vector<int> arr2, int m)
+{
+    set<int> res;
+    for (int i = 0; i < n; i++)
+        res.insert(arr1[i]);
+    for (int i = 0; i < m; i++)
+        res.insert(arr2[i]);
+    for (int i : res)
+        cout << i << " ";
+    cout << endl;
+}
 
-//? Using vector.back() to check for duplicated
-// void unionOfArray3(vector<int> arr, int n, vector<int> temp, int m)
-// {
-//     sort(arr.begin(), arr.end());
-//     sort(temp.begin(), temp.end());
-//     int i = 0, j = 0;
-//     vector<int> res;
-//     while (i < n && j < m)
-//     {
+//? Using vector.back() to check for duplicates
+void unionOfArray3(vector<int> arr, int n, vector<int> temp, int m)
+{
+    sort(arr.begin(), arr.end());
+    sort(temp.begin(), temp.end());
+    int i = 0, j = 0;
+    vector<int> res;
+    while (i < n && j < m)
+    {
 
-//         if (arr[i] <= temp[j])
-//         {
-//             if (i == 0 || res.back() != arr[i])
-//                 res.push_back(arr[i]);
-//             i++;
-//         }
-//         else if (j == 0 || temp[j] < arr[i])
-//         {
-//             if (res.back() != temp[j])
-//                 res.push_back(temp[j]);
-//             j++;
-//         }
-//     }
-//     while (i < n)
-//     {
-//         if (i == 0 || res.back() != arr[i])
-//             res.push_back(arr[i]);
-//         i++;
-//     }
-//     while (j < m)
-//     {
-//         if (j == 0 || temp[j] != temp[j - 1])
-//             res.push_back(temp[j]);
-//         j++;
-//     }
-//     printArr(res, res.size());
-// }
+        if (arr[i] <= temp[j])
+        {
+            if (i == 0 || res.back() != arr[i])
+                res.push_back(arr[i]);
+            i++;
+        }
+        else if (j == 0 || temp[j] < arr[i])
+        {
+            if (res.back() != temp[j])
+                res.push_back(temp[j]);
+            j++;
+        }
+    }
+    while (i < n)
+    {
+        if (i == 0 || res.back() != arr[i])
+            res.push_back(arr[i]);
+        i++;
+    }
+    while (j < m)
+    {
+        if (j == 0 || temp[j] != temp[j - 1])
+            res.push_back(temp[j]);
+        j++;
+    }
+    printArr(res, res.size());
+}
 
 void findMissingNumber(vector<int> arr, int n)
 {
@@ -264,14 +264,15 @@ void findMissingNumber(vector<int> arr, int n)
 }
 
 //? Using XOR
-// void findMissingNumber2(vector<int> nums, int n){
-//     int xor1 = 0, xor2 = 0;
-//     for (int i = 1; i <= n; i++)
-//         xor1 ^= i;
-//     for (int i = 0; i < n; i++)
-//         xor2 ^= nums[i];
-//     cout << (xor1 ^ xor2) << endl;
-// }
+void findMissingNumber2(vector<int> nums, int n)
+{
+    int xor1 = 0, xor2 = 0;
+    for (int i = 1; i <= n; i++)
+        xor1 ^= i;
+    for (int i = 0; i < n; i++)
+        xor2 ^= nums[i];
+    cout << (xor1 ^ xor2) << endl;
+}
 
 void findMaximumConsecutiveOnes(vector<int> nums, int n)
 {
@@ -295,22 +296,65 @@ void findOddOneOut(vector<int> nums, int n)
     cout << xorNum << endl;
 }
 
-void findLongestSubArrayOfSumK(vector<int>nums, int n, int k){
-    int cnt = 0;
+//! O(n^2) and doesn't work for -ve
+void findLengthOfLongestSubArrayOfSumK(vector<int> nums, int n, long long k)
+{
+    int res = 0;
     for (int i = 0; i < n; i++)
     {
-        int sum = arr[i];
-        int j = i+1;
-        while (sum <= k)
+        long long sum = 0;
+        for (int j = i; j < n && sum <= k; j++)
         {
-            /* code */
+            sum += nums[j];
+            if (sum == k)
+                res = max(res, j - i + 1);
         }
-        
     }
+    cout << res << endl;
 }
 
-    int
-    main()
+//! O(n) better but works for +ve elements
+
+//? 2 pointer technique
+void findLengthOfLongestSubArrayOfSumK2(vector<int> nums, int n, long long k)
+{
+    int left = 0, right = 0, maxLen = 0, sum = 0;
+    while (right < n)
+    {
+        sum += nums[right];
+        while (sum > k && right < n)
+        {
+            sum -= nums[left++];
+        }
+        if (sum == k)
+            maxLen = max(maxLen, right - left + 1);
+        right++;
+    }
+    cout << maxLen << endl;
+}
+
+//? O(n) works for +ve and -ve elements
+void findLengthOfLongestSubArrayOfSumK3(vector<int> nums, int n, long long k)
+{
+    map<long long, int> preSumMap;
+    long long sum = 0;
+    int maxLen = -1;
+    for (int i = 0; i < n; i++)
+    {
+        sum += nums[i];
+        if (sum == k)
+            maxLen = i + 1;
+
+        if (preSumMap.find(sum - k) != preSumMap.end())
+            maxLen = max(maxLen, (i - preSumMap[sum - k]));
+
+        if (preSumMap.find(sum) == preSumMap.end())
+            preSumMap[sum] = i;
+    }
+    cout << maxLen << endl;
+}
+
+int main()
 {
     int n;
     cin >> n;
@@ -336,7 +380,7 @@ void findLongestSubArrayOfSumK(vector<int>nums, int n, int k){
     cout << "----------------------" << endl;
     printArr(arr, n);
     leftRotateByK(arr, n, 3);
-    // leftRotateByK2(arr, n, 3);
+    leftRotateByK2(arr, n, 3);
     printArr(arr, n);
     cout << "----------------------" << endl;
     printArr(arr, n);
@@ -356,14 +400,14 @@ void findLongestSubArrayOfSumK(vector<int>nums, int n, int k){
     printArr(temp, m);
     cout << "        =        " << endl;
     unionOfArray(arr, n, temp, m);
-    // unionOfArray1(arr, n, temp, m);
-    // unionOfArray2(arr, n, temp, m);
-    // unionOfArray3(arr, n, temp, m);
+    unionOfArray1(arr, n, temp, m);
+    unionOfArray2(arr, n, temp, m);
+    unionOfArray3(arr, n, temp, m);
     cout << "----------------------" << endl;
     vector<int> nums = {1, 2, 3, 4, 5, 6, 7, 9};
     printArr(nums, nums.size());
     findMissingNumber(nums, 9);
-    // findMissingNumber2(nums, 9);
+    findMissingNumber2(nums, 9);
     cout << "----------------------" << endl;
     nums = {0, 1, 0, 1, 1, 1, 0, 0, 1, 1};
     printArr(nums, nums.size());
@@ -373,9 +417,15 @@ void findLongestSubArrayOfSumK(vector<int>nums, int n, int k){
     printArr(nums, nums.size());
     findOddOneOut(nums, nums.size());
     cout << "----------------------" << endl;
-    nums = {2, 3, 5, 1, 9};
+    nums = {2, 3, 5, 1, 4, 5, 3, 1, 1};
     printArr(nums, nums.size());
-    findLongestSubArrayOfSumK(nums, nums.size(), 10);
+    findLengthOfLongestSubArrayOfSumK(nums, nums.size(), 10);
+    findLengthOfLongestSubArrayOfSumK2(nums, nums.size(), 10);
     cout << "----------------------" << endl;
+    nums = {-2, -3, -5, 1, 4, -5, -3, -1, 1};
+    printArr(nums, nums.size());
+    findLengthOfLongestSubArrayOfSumK3(nums, nums.size(), -9);
+    cout << "----------------------" << endl;
+
     return 0;
 }
