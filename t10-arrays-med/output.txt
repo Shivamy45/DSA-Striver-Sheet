@@ -7,5 +7,11 @@ arr[0] + arr[3] = 3 + 5 => 8
 2 0 2 1 1 0 
 0 0 1 1 2 2 
 ---------------------
-3 -2 -2 9 8 1 -2 -2 4 -2 -2 
+3 -2 -2 -9 -8 -1 -2 -2 -4 -2 -2 
 -2 came 6 times in the array.
+-2 came 6 times in the array.
+-2 came 6 times in the array.
+---------------------
+3 -2 -2 -9 -8 -1 -2 -2 -4 -2 -2 
+Max sum 3 starts from index 0 to 0
+Max sum 3 starts from index 0 to 0

@@ -1,8 +1,11 @@
 #include <iostream>
+#include <vector>
+#include <unordered_map>
 #include <map>
+#include <climits>
 using namespace std;
 
-void printArr(vector<int> arr)
+void printArr(vector<int> &arr)
 {
     for (int i : arr)
         cout << i << " ";
@@ -10,7 +13,7 @@ void printArr(vector<int> arr)
 }
 
 //! O(n^2)
-void twoSum(vector<int> nums, int target)
+void twoSum(vector<int> &nums, int target)
 {
     for (int i = 0; i < nums.size() - 1; i++)
     {
@@ -27,7 +30,7 @@ void twoSum(vector<int> nums, int target)
 
 //? Using Map - O(nlog n)
 //? Using Unordered Map - O(n) / O(n^2)
-void twoSum2(vector<int> nums, int target)
+void twoSum2(vector<int> &nums, int target)
 {
     unordered_map<int, int> mpp;
     for (int i = 0; i < nums.size(); i++)
@@ -43,9 +46,9 @@ void twoSum2(vector<int> nums, int target)
 }
 
 //! This uses functions that are not suitable for interviews
-void twoSum3(vector<int> nums, int target)
+void twoSum3(vector<int> &nums, int target)
 {
-    for (int i = 0; i <= nums.size(); i++)
+    for (int i = 0; i < nums.size(); i++)
     {
         auto it = find(nums.begin(), nums.end(), target - nums[i]);
         if (it != nums.end())
@@ -80,7 +83,7 @@ void sort0s1s2s(vector<int> &arr)
     }
 }
 
-void majorityElement(vector<int> nums)
+void majorityElement(vector<int> &nums)
 {
     int n = nums.size();
     for (int i = 0; i < n; i++)
@@ -100,7 +103,7 @@ void majorityElement(vector<int> nums)
     cout << "None" << endl;
 }
 
-void majorityElement2(vector<int> nums)
+void majorityElement2(vector<int> &nums)
 {
     int n = nums.size();
     map<int, int> mpp;
@@ -108,11 +111,11 @@ void majorityElement2(vector<int> nums)
     {
         mpp[nums[i]]++;
     }
-    for (int i = 0; i < mpp.size(); i++)
+    for (auto it : mpp)
     {
-        if (mpp[i] > n / 2)
+        if (it.second > n / 2)
         {
-            cout << i << " came " << mpp[i] << " times in the array." << endl;
+            cout << it.first << " came " << it.second << " times in the array." << endl;
             return;
         }
     }
@@ -120,7 +123,7 @@ void majorityElement2(vector<int> nums)
 }
 
 // Moore’s Voting Algorithm
-void majorityElement3(vector<int> nums)
+void majorityElement3(vector<int> &nums)
 {
     int count = 0, element = 0, n = nums.size();
     for (int i = 0; i < n; i++)
@@ -149,22 +152,49 @@ void majorityElement3(vector<int> nums)
     cout << "None" << endl;
 }
 
-void maxSumOfSubArray(vector<int> nums)
+//? This works in O(n^2) time
+void maxSumOfSubArray(vector<int> &nums)
 {
-    int n = nums.size(), res = INT_MIN;
+    int n = nums.size(), res = INT_MIN, ansStart = -1, ansEnd = -1;
     for (int i = 0; i < n; i++)
     {
         int sum = 0;
         for (int j = i; j < n; j++)
         {
             sum += nums[j];
+            if (res < sum)
+            {
+                res = sum;
+                ansStart = i;
+                ansEnd = j;
+            }
         }
-        res = max(sum, res);
     }
-    cout << "Max Sum of SubArray: " << res << endl;
+    cout << "Max sum " << res << " starts from index " << ansStart << " to " << ansEnd << endl;
 }
 
+//! This only works for +ve MaxSum of SubArray
+void maxSumOfSubArray2(vector<int> &nums)
+{
+    int n = nums.size(), sum = 0, res = INT_MIN, start = -1, ansStart = -1, ansEnd = -1;
+    for (int i = 0; i < n; i++)
+    {
+        if (sum == 0)
+            start = i;
 
+        sum += nums[i];
+
+        if (sum < 0)
+            sum = 0;
+        if (res < sum)
+        {
+            ansStart = start;
+            ansEnd = i;
+            res = sum;
+        }
+    }
+    cout << "Max sum " << res << " starts from index " << ansStart << " to " << ansEnd << endl;
+}
 
 int main()
 {
@@ -200,13 +230,9 @@ int main()
     majorityElement2(nums2);
     majorityElement3(nums2);
     cout << "---------------------" << endl;
+    printArr(nums2);
     maxSumOfSubArray(nums2);
+    maxSumOfSubArray2(nums2);
 
     return 0;
 }
-
-/*
-2 0 2 1 1 0
-0 2 2 1 1 0
-
- */
