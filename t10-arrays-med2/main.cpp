@@ -57,7 +57,7 @@ void stockBuyAndSell2(vector<int> &prices)
     cout << "Max Profit with many transaction: " << profit << endl;
 }
 
-void alternatingArray(vector<int> &arr)
+void alternatingarr(vector<int> &arr)
 {
     int n = arr.size();
     vector<int> posArr;
@@ -78,7 +78,7 @@ void alternatingArray(vector<int> &arr)
         arr[2 * i + 1] = negArr[i];
     }
 }
-void alternatingArray2(vector<int> &arr)
+void alternatingarr2(vector<int> &arr)
 {
     int n = arr.size();
     vector<int> res(n, 0);
@@ -100,7 +100,7 @@ void alternatingArray2(vector<int> &arr)
 }
 
 //? if no.(+ve) != no.(-ve)
-void alternatingArray3(vector<int> &arr)
+void alternatingarr3(vector<int> &arr)
 {
     int n = arr.size();
     vector<int> res(n);
@@ -169,7 +169,7 @@ void nextPermutation2(vector<int> &nums)
     cout << "Done next permutation" << endl;
 }
 
-void leaderInArray(vector<int> &arr)
+void leaderInarr(vector<int> &arr)
 {
     int n = arr.size();
     int maxEle = INT_MIN;
@@ -377,112 +377,210 @@ void rotateMatrixBy90Deg2(vector<vector<int>> &matrix)
     }
 }
 
+void spiralarr(vector<vector<int>> &arr)
+{
+    // 00 01 02 03
+    // 10 11 12 13
+    // 20 21 22 23
+    // 30 31 32 33
+    int n = arr.size();
+    int row = 0, col = 0, endRow = n - 1, endCol = n - 1;
+    while (row <= endRow && col <= endCol)
+    {
+        for (int i = col; i <= endCol; i++)
+            cout << arr[row][i] << " ";
+        row++;
+        for (int i = row; i <= endRow; i++)
+            cout << arr[i][endCol] << " ";
+        endCol--;
+        for (int i = endCol; i >= col; i--)
+        {
+            if (row == endRow)
+                break;
+            cout << arr[endRow][i] << " ";
+        }
+        endRow--;
+        for (int i = endRow; i >= row; i--)
+        {
+            if (col == endCol)
+                break;
+            cout << arr[i][col] << " ";
+        }
+        col++;
+    }
+}
+
+void findAllSubarrsWithGivenSum(vector<int> &arr, int k)
+{
+    int n = arr.size();
+    int cnt = 0;
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = i; j < n; j++)
+        {
+            int sum = 0;
+            for (int K = i; K <= j; K++)
+                sum += arr[K];
+            if (sum == k)
+                cnt++;
+        }
+    }
+    cout << cnt << endl;
+}
+void findAllSubarrsWithGivenSum2(vector<int> &arr, int k)
+{
+    int cnt = 0, sum = 0;
+    int n = arr.size();
+    for (int i = 0; i < n; i++)
+    {
+        sum = 0;
+        for (int j = i; j < n; j++)
+        {
+            sum += arr[j];
+            if (sum == k)
+                cnt++;
+        }
+    }
+    cout << cnt << endl;
+}
+
+void findAllSubarrsWithGivenSum3(vector<int> &arr, int k)
+{
+    int n = arr.size();
+    unordered_map<int, int> mpp;
+    int sum = 0, cnt = 0;
+    mpp[0] = 1;
+    for (int i = 0; i < n; i++)
+    {
+        sum += arr[i];
+        cnt += mpp[sum - k];
+        mpp[sum]++;
+    }
+    cout << cnt << endl;
+}
+
 int main()
 {
     int n;
     cin >> n;
-    vector<int> prices(n);
-    for (int &a : prices)
-        cin >> a;
-    stockBuyAndSell(prices);
-    cout << "-----------------------------------" << endl;
-    stockBuyAndSell2(prices);
-    cout << "-----------------------------------" << endl;
     vector<int> arr(n);
     for (int &a : arr)
         cin >> a;
     printArr(arr);
-    alternatingArray(arr);
+    stockBuyAndSell(arr);
+    cout << "-----------------------------------" << endl;
+    printArr(arr);
+    stockBuyAndSell2(arr);
+    cout << "-----------------------------------" << endl;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    printArr(arr);
+    alternatingarr(arr);
+    printArr(arr);
+    cout << "-----------------------------------" << endl;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    printArr(arr);
+    alternatingarr2(arr);
+    printArr(arr);
+    cout << "-----------------------------------" << endl;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    printArr(arr);
+    alternatingarr3(arr);
+    printArr(arr);
+    cout << "-----------------------------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    printArr(arr);
+    nextPermutation(arr);
+    printArr(arr);
+    cout << "-----------------------------------" << endl;
+    printArr(arr);
+    nextPermutation2(arr);
     printArr(arr);
     cout << "-----------------------------------" << endl;
     for (int &a : arr)
         cin >> a;
     printArr(arr);
-    alternatingArray2(arr);
+    leaderInarr(arr);
+    cout << "-----------------------------------" << endl;
     printArr(arr);
+    longestConsSequence(arr);
     cout << "-----------------------------------" << endl;
-    for (int &a : arr)
-        cin >> a;
     printArr(arr);
-    alternatingArray3(arr);
-    printArr(arr);
-    cout << "-----------------------------------" << endl;
-    int m;
-    cin >> m;
-    vector<int> nums(m);
-    for (int &a : nums)
-        cin >> a;
-    printArr(nums);
-    nextPermutation(nums);
-    printArr(nums);
-    cout << "-----------------------------------" << endl;
-    printArr(nums);
-    nextPermutation2(nums);
-    printArr(nums);
-    cout << "-----------------------------------" << endl;
-    for (int &a : nums)
-        cin >> a;
-    printArr(nums);
-    leaderInArray(nums);
-    cout << "-----------------------------------" << endl;
-    printArr(nums);
-    longestConsSequence(nums);
-    cout << "-----------------------------------" << endl;
-    printArr(nums);
-    longestConsSequence2(nums);
+    longestConsSequence2(arr);
     cout << "-----------------------------------" << endl;
     int x, y;
     cin >> x >> y;
-    vector<vector<int>> arr2(x, vector<int>(y));
+    vector<vector<int>> array2(x, vector<int>(y));
     for (int i = 0; i < x; i++)
         for (int j = 0; j < y; j++)
-            cin >> arr2[i][j];
-    vector<vector<int>> matrix = arr2;
+            cin >> array2[i][j];
     cout << "Original Matrix:" << endl;
-    printMatrix(matrix);
-    setMatrixZero(matrix);
+    printMatrix(array2);
+    setMatrixZero(array2);
     cout << "Matrix after setMatrixZero:" << endl;
-    printMatrix(matrix);
+    printMatrix(array2);
     cout << "-----------------------------------" << endl;
-    matrix = arr2;
     cout << "Original Matrix:" << endl;
-    printMatrix(matrix);
-    setMatrixZero2(matrix);
+    printMatrix(array2);
+    setMatrixZero2(array2);
     cout << "Matrix after setMatrixZero:" << endl;
-    printMatrix(matrix);
+    printMatrix(array2);
     cout << "-----------------------------------" << endl;
-    matrix = arr2;
     cout << "Original Matrix:" << endl;
-    printMatrix(matrix);
-    setMatrixZero3(matrix);
+    printMatrix(array2);
+    setMatrixZero3(array2);
     cout << "Matrix after setMatrixZero:" << endl;
-    printMatrix(matrix);
+    printMatrix(array2);
     cout << "-----------------------------------" << endl;
-    matrix = arr2;
     cout << "Original Matrix:" << endl;
-    printMatrix(matrix);
-    setMatrixZero4(matrix);
+    printMatrix(array2);
+    setMatrixZero4(array2);
     cout << "Matrix after setMatrixZero:" << endl;
-    printMatrix(matrix);
+    printMatrix(array2);
     cout << "-----------------------------------" << endl;
     cin >> n;
-    vector<vector<int>> arr3(n, vector<int>(n));
+    array2.resize(n, vector<int>(n));
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
-            cin >> arr3[i][j];
-    matrix = arr3;
+            cin >> array2[i][j];
     cout << "Original Matrix:" << endl;
-    printMatrix(matrix);
-    rotateMatrixBy90Deg(matrix);
+    printMatrix(array2);
+    rotateMatrixBy90Deg(array2);
     cout << "Matrix after rotateMatrixBy90Deg:" << endl;
-    printMatrix(matrix);
+    printMatrix(array2);
     cout << "-----------------------------------" << endl;
-    matrix = arr3;
     cout << "Original Matrix:" << endl;
-    printMatrix(matrix);
-    rotateMatrixBy90Deg2(matrix);
+    printMatrix(array2);
+    rotateMatrixBy90Deg2(array2);
     cout << "Matrix after rotateMatrixBy90Deg:" << endl;
-    printMatrix(matrix);
+    printMatrix(array2);
+    cout << "-----------------------------------" << endl;
+    printMatrix(array2);
+    cout << "Starting Spiral" << endl;
+    spiralarr(array2);
+    cout << "-----------------------------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+
+    printArr(arr);
+    findAllSubarrsWithGivenSum(arr, 6);
+    cout << "-----------------------------------" << endl;
+    printArr(arr);
+    findAllSubarrsWithGivenSum2(arr, 6);
+    cout << "-----------------------------------" << endl;
+    printArr(arr);
+    findAllSubarrsWithGivenSum2(arr, 6);
     cout << "-----------------------------------" << endl;
 
     return 0;
