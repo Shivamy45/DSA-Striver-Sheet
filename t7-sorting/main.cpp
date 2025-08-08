@@ -1,11 +1,17 @@
 #include <iostream>
 using namespace std;
 
+#include <iostream>
+using namespace std;
+
+//? Utility to copy array - O(n)
 void copyArr(int arr[], int temp[], int n)
 {
     for (int i = 0; i < n; i++)
         arr[i] = temp[i];
 }
+
+//? Utility to print array - O(n)
 void printArr(int arr[], int n)
 {
     for (int i = 0; i < n; i++)
@@ -13,6 +19,7 @@ void printArr(int arr[], int n)
     cout << endl;
 }
 
+//? Simple selection sort - O(n^2)
 void selectionSort(int arr[], int n)
 {
     for (int i = 0; i < n - 1; i++)
@@ -30,6 +37,7 @@ void selectionSort(int arr[], int n)
     }
 }
 
+//? Optimized bubble sort with early break - O(n^2)
 void bubbleSort(int arr[], int n)
 {
     for (int i = 0; i < n - 1; i++)
@@ -46,6 +54,7 @@ void bubbleSort(int arr[], int n)
     }
 }
 
+//? Insertion sort - best: O(n), avg/worst: O(n^2)
 void insertionSort(int arr[], int n)
 {
     for (int i = 0; i < n; i++)

@@ -3,12 +3,14 @@
 #include <unordered_set>
 using namespace std;
 
+# O(n)
 void printArr(vector<int> &arr)
 {
     for (int i : arr)
         cout << i << " ";
     cout << endl;
 }
+# O(n*m)
 void printMatrix(vector<vector<int>> &arr)
 {
     for (auto i : arr)
@@ -19,7 +21,7 @@ void printMatrix(vector<vector<int>> &arr)
     }
 }
 
-//! This is if we can do only 1 transaction
+//! Only 1 transaction allowed - O(n)
 void stockBuyAndSell(vector<int> &prices)
 {
     int n = prices.size();
@@ -32,6 +34,7 @@ void stockBuyAndSell(vector<int> &prices)
     cout << "Max Profit with 1 transaction: " << maxProfit << endl;
 }
 
+//? Multiple transactions allowed - O(n)
 void stockBuyAndSell2(vector<int> &prices)
 {
     bool buy = false;
@@ -57,6 +60,7 @@ void stockBuyAndSell2(vector<int> &prices)
     cout << "Max Profit with many transaction: " << profit << endl;
 }
 
+//! Works only when +ve and -ve counts are equal - O(n)
 void alternatingarr(vector<int> &arr)
 {
     int n = arr.size();
@@ -78,6 +82,8 @@ void alternatingarr(vector<int> &arr)
         arr[2 * i + 1] = negArr[i];
     }
 }
+
+//! Uses extra space - O(n)
 void alternatingarr2(vector<int> &arr)
 {
     int n = arr.size();
@@ -99,7 +105,7 @@ void alternatingarr2(vector<int> &arr)
     arr = res;
 }
 
-//? if no.(+ve) != no.(-ve)
+//? Handles unequal counts of +ve and -ve - O(n)
 void alternatingarr3(vector<int> &arr)
 {
     int n = arr.size();
@@ -135,11 +141,14 @@ void alternatingarr3(vector<int> &arr)
     arr = res;
 }
 
+//! Uses STL function - O(n)
 void nextPermutation(vector<int> &nums)
 {
     next_permutation(nums.begin(), nums.end());
     cout << "Done next permutation" << endl;
 }
+
+//? Custom implementation - O(n)
 void nextPermutation2(vector<int> &nums)
 {
     int n = nums.size(), k = -1;
@@ -169,6 +178,7 @@ void nextPermutation2(vector<int> &nums)
     cout << "Done next permutation" << endl;
 }
 
+// O(n)
 void leaderInarr(vector<int> &arr)
 {
     int n = arr.size();
@@ -189,7 +199,7 @@ void leaderInarr(vector<int> &arr)
     cout << endl;
 }
 
-//? Optimal Approach
+//! Sorting based approach - O(n log n)
 void longestConsSequence(vector<int> &nums)
 {
     sort(nums.begin(), nums.end());
@@ -207,7 +217,7 @@ void longestConsSequence(vector<int> &nums)
     cout << "Longest Consecutive Sequence: " << maxSeq << endl;
 }
 
-//? Using set data structure
+//? Using unordered_set - O(n)
 void longestConsSequence2(vector<int> &nums)
 {
     unordered_set<int> s;
@@ -232,6 +242,7 @@ void longestConsSequence2(vector<int> &nums)
     cout << "Longest Consecutive Sequence: " << longest << endl;
 }
 
+//! Brute force with extra matrix - O(n*m*(n+m))
 void setMatrixZero(vector<vector<int>> &matrix)
 {
     vector<vector<int>> arr = matrix;
@@ -248,6 +259,7 @@ void setMatrixZero(vector<vector<int>> &matrix)
     matrix = arr;
 }
 
+//! Marks using -1 in-place - O(n*m*(n+m))
 void setMatrixZero2(vector<vector<int>> &matrix)
 {
     int n = matrix.size(), m = matrix[0].size();
@@ -267,6 +279,8 @@ void setMatrixZero2(vector<vector<int>> &matrix)
             if (matrix[i][j] == -1)
                 matrix[i][j] = 0;
 }
+
+//! Uses extra row and col arrays - O(n*m)
 void setMatrixZero3(vector<vector<int>> &matrix)
 {
     int n = matrix.size(), m = matrix[0].size();
@@ -294,6 +308,7 @@ void setMatrixZero3(vector<vector<int>> &matrix)
     }
 }
 
+//? Optimized in-place marking - O(n*m)
 void setMatrixZero4(vector<vector<int>> &matrix)
 {
     int col0 = 1, n = matrix.size(), m = matrix[0].size();
@@ -324,6 +339,7 @@ void setMatrixZero4(vector<vector<int>> &matrix)
             matrix[j][0] = 0;
 }
 
+//! Using extra matrix - O(n^2)
 void rotateMatrixBy90Deg(vector<vector<int>> &matrix)
 {
     // 1 2 3
@@ -350,6 +366,7 @@ void rotateMatrixBy90Deg(vector<vector<int>> &matrix)
     matrix = res;
 }
 
+//? In-place transpose and reverse - O(n^2)
 void rotateMatrixBy90Deg2(vector<vector<int>> &matrix)
 {
     int n = matrix.size();
@@ -377,6 +394,7 @@ void rotateMatrixBy90Deg2(vector<vector<int>> &matrix)
     }
 }
 
+//? Standard spiral traversal - O(n^2)
 void spiralarr(vector<vector<int>> &arr)
 {
     // 00 01 02 03
@@ -410,6 +428,7 @@ void spiralarr(vector<vector<int>> &arr)
     }
 }
 
+//! Brute force 3 loops - O(n^3)
 void findAllSubarrsWithGivenSum(vector<int> &arr, int k)
 {
     int n = arr.size();
@@ -428,6 +447,8 @@ void findAllSubarrsWithGivenSum(vector<int> &arr, int k)
     }
     cout << cnt << endl;
 }
+
+//! Better with 2 loops - O(n^2)
 void findAllSubarrsWithGivenSum2(vector<int> &arr, int k)
 {
     int cnt = 0, sum = 0;
@@ -445,6 +466,7 @@ void findAllSubarrsWithGivenSum2(vector<int> &arr, int k)
     cout << cnt << endl;
 }
 
+//? Optimal using prefix sum + hashmap - O(n)
 void findAllSubarrsWithGivenSum3(vector<int> &arr, int k)
 {
     int n = arr.size();

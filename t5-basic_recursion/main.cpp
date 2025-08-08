@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 
+//? Prints the count using recursion with increment - O(n)
 void printNtimes(int cnt)
 {
     if (cnt == 10)
@@ -9,6 +10,7 @@ void printNtimes(int cnt)
     printNtimes(cnt);
 }
 
+//? Prints "Shivam" n times using recursion - O(n)
 void printNameNtime(int n, int i = 1)
 {
     if (i > n)
@@ -17,6 +19,7 @@ void printNameNtime(int n, int i = 1)
     printNameNtime(n, i + 1);
 }
 
+//? Prints numbers from 1 to n using recursion - O(n)
 void print1toN(int n, int i = 1)
 {
     if (i > n)
@@ -32,6 +35,7 @@ void print1toN(int n, int i = 1)
 //     print1toN(n, i + 1);
 // }
 
+//? Prints numbers from n to 1 using recursion - O(n)
 void printNto1(int n)
 {
     if (n <= 0)
@@ -46,6 +50,7 @@ void printNto1(int n)
 //         return n;
 //     return n + sumOfFirstNnumbers(n - 1);
 // }
+//? Sum of first n numbers using tail recursion - O(n)
 int sumOfFirstNnumbers(int n, int sum = 0)
 {
     if (n <= 0)
@@ -59,6 +64,7 @@ int sumOfFirstNnumbers(int n, int sum = 0)
 //         return fact;
 //     return factOfNnumbers(n - 1, fact * n);
 // }
+//? Factorial using recursion - O(n)
 int factOfNnumbers(int n)
 {
     if (n <= 1)
@@ -66,6 +72,7 @@ int factOfNnumbers(int n)
     return n * factOfNnumbers(n - 1);
 }
 
+//? Reverses array using recursion - O(n)
 void reverseArray(int arr[], int end, int start = 0){
     if(start >= end)
         return;
@@ -80,6 +87,7 @@ void reverseArray(int arr[], int end, int start = 0){
 //     reverseArray(arr, n, i + 1);
 // }
 
+//? Checks if a string is palindrome using recursion - O(n)
 bool isPalindrome(string s, int i = 0){
     if (i >= s.length() / 2)
         return true;
@@ -88,6 +96,7 @@ bool isPalindrome(string s, int i = 0){
     return isPalindrome(s, i + 1);
 }
 
+//? Calculates nth Fibonacci number using recursion - O(2^n)
 int fib(int n){
     if (n == 0 || n == 1)
         return n;

@@ -12,7 +12,7 @@ void printArr(vector<int> &arr)
     cout << endl;
 }
 
-//! O(n^2)
+//! Brute Force - O(n^2)
 void twoSum(vector<int> &nums, int target)
 {
     for (int i = 0; i < nums.size() - 1; i++)
@@ -28,8 +28,7 @@ void twoSum(vector<int> &nums, int target)
     }
 }
 
-//? Using Map - O(nlog n)
-//? Using Unordered Map - O(n) / O(n^2)
+//? Using Map - O(nlogn) and Using Unordered Map - O(n)/O(n^2)
 void twoSum2(vector<int> &nums, int target)
 {
     unordered_map<int, int> mpp;
@@ -45,7 +44,7 @@ void twoSum2(vector<int> &nums, int target)
     }
 }
 
-//! This uses functions that are not suitable for interviews
+//! Uses find() - Not suitable for interviews - O(n^2)
 void twoSum3(vector<int> &nums, int target)
 {
     for (int i = 0; i < nums.size(); i++)

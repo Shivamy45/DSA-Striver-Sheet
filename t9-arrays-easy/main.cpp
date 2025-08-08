@@ -18,6 +18,7 @@ void findMaxEle(vector<int> arr, int n)
     cout << maxEle << endl;
 }
 
+//? Brute force with tracking min/max - O(n)
 void findSecMinAndMax(vector<int> arr, int n)
 {
     int maximum = INT_MIN, secondMax = INT_MIN, minimum = INT_MAX, secondMin = INT_MAX;
@@ -45,6 +46,7 @@ void findSecMinAndMax(vector<int> arr, int n)
     cout << "Second Minimum: " << secondMin << " Second Maximum: " << secondMax << endl;
 }
 
+//? Simple linear check - O(n)
 void isSorted(vector<int> arr, int n)
 {
     for (int i = 1; i < n; i++)
@@ -58,6 +60,7 @@ void isSorted(vector<int> arr, int n)
     cout << "True" << endl;
 }
 
+//! Sort before removing duplicates - O(n log n)
 void removeDuplicatesFromSortedArray(vector<int> &arr, int n)
 {
     sort(arr.begin(), arr.end());
@@ -72,6 +75,7 @@ void removeDuplicatesFromSortedArray(vector<int> &arr, int n)
     }
 }
 
+//! Shifts all elements by one - O(n)
 void leftRotateByOne(vector<int> &arr, int n)
 {
     int x = arr[0];
@@ -82,6 +86,7 @@ void leftRotateByOne(vector<int> &arr, int n)
     arr[n - 1] = x;
 }
 
+//? Optimized rotation using reverse - O(n)
 void leftRotateByK(vector<int> &arr, int n, int k)
 {
     k %= n;
@@ -89,7 +94,7 @@ void leftRotateByK(vector<int> &arr, int n, int k)
     reverse(arr.begin(), arr.begin() + k);
     reverse(arr.begin() + k, arr.end());
 }
-//? Does LeftRotateOne K times
+//! Left rotate by one, k times - O(k * n)
 void leftRotateByK2(vector<int> &arr, int n, int k)
 {
     k %= n;
@@ -112,6 +117,7 @@ void leftRotateByK2(vector<int> &arr, int n, int k)
 //         if(i < n && j < n) swap(arr[i++], arr[j++]);
 //     }
 // }
+//? Efficient zero movement - O(n)
 void moveZeroes(vector<int> &arr, int n)
 {
     int j = -1;
@@ -134,6 +140,7 @@ void moveZeroes(vector<int> &arr, int n)
     }
 }
 
+//? Linear search - O(n)
 void findElement(vector<int> arr, int n, int num)
 {
     for (int i = 0; i < n; i++)
@@ -147,6 +154,7 @@ void findElement(vector<int> arr, int n, int num)
     cout << -1 << endl;
 }
 
+//! Two-pointer merge after sorting - O(n + m)
 void unionOfArray(vector<int> arr, int n, vector<int> temp, int m)
 {
     sort(arr.begin(), arr.end());
@@ -191,7 +199,7 @@ void unionOfArray(vector<int> arr, int n, vector<int> temp, int m)
     cout << endl;
 }
 
-//? Using MAP
+//! Using MAP - O((n + m) log n)
 void unionOfArray1(vector<int> arr1, int n, vector<int> arr2, int m)
 {
     map<int, int> freq;
@@ -204,7 +212,7 @@ void unionOfArray1(vector<int> arr1, int n, vector<int> arr2, int m)
     cout << endl;
 }
 
-//? Using SET
+//! Using SET - O((n + m) log n)
 void unionOfArray2(vector<int> arr1, int n, vector<int> arr2, int m)
 {
     set<int> res;
@@ -217,7 +225,7 @@ void unionOfArray2(vector<int> arr1, int n, vector<int> arr2, int m)
     cout << endl;
 }
 
-//? Using vector.back() to check for duplicates
+//? Optimized merge using vector.back() - O(n + m)
 void unionOfArray3(vector<int> arr, int n, vector<int> temp, int m)
 {
     sort(arr.begin(), arr.end());
@@ -255,6 +263,7 @@ void unionOfArray3(vector<int> arr, int n, vector<int> temp, int m)
     printArr(res, res.size());
 }
 
+//! Uses formula sum - O(n)
 void findMissingNumber(vector<int> arr, int n)
 {
     int sum = 0;
@@ -263,7 +272,7 @@ void findMissingNumber(vector<int> arr, int n)
     cout << (n * (n + 1)) / 2 - sum << endl;
 }
 
-//? Using XOR
+//? Using XOR technique - O(n)
 void findMissingNumber2(vector<int> nums, int n)
 {
     int xor1 = 0, xor2 = 0;
@@ -274,6 +283,7 @@ void findMissingNumber2(vector<int> nums, int n)
     cout << (xor1 ^ xor2) << endl;
 }
 
+//? Linear scan tracking streaks - O(n)
 void findMaximumConsecutiveOnes(vector<int> nums, int n)
 {
     int consOnes = 0, res = 0;
@@ -288,6 +298,7 @@ void findMaximumConsecutiveOnes(vector<int> nums, int n)
     cout << res << endl;
 }
 
+//? XOR all elements - O(n)
 void findOddOneOut(vector<int> nums, int n)
 {
     int xorNum = 0;
@@ -314,7 +325,6 @@ void findLengthOfLongestSubArrayOfSumK(vector<int> nums, int n, long long k)
 }
 
 //! O(n) better but works for +ve elements
-
 //? 2 pointer technique
 void findLengthOfLongestSubArrayOfSumK2(vector<int> nums, int n, long long k)
 {

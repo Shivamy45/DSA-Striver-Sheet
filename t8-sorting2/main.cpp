@@ -28,6 +28,7 @@ void merge(vector<int> &arr, int low, int mid, int high)
         arr[i] = temp[i - low];
 }
 
+//? Standard Merge Sort - O(n log n)
 void mergeSort(vector<int> &arr, int low, int high)
 {
     if (low >= high)
@@ -39,6 +40,7 @@ void mergeSort(vector<int> &arr, int low, int high)
     printArr(arr);
 }
 
+//! Uses recursion - inefficient for large inputs - O(n^2)
 void recursiveBubbleSort(vector<int> &arr, int n)
 {
     if (n <= 1)
@@ -52,6 +54,7 @@ void recursiveBubbleSort(vector<int> &arr, int n)
     recursiveBubbleSort(arr, n - 1);
 }
 
+//! Recursive insertion sort - O(n^2)
 void recursiveInsertionSort(vector<int> &arr, int n)
 {
     if (n < 1)
@@ -66,6 +69,7 @@ void recursiveInsertionSort(vector<int> &arr, int n)
     printArr(arr);
 }
 
+//! Partition function used in Quick Sort
 int partition(vector<int> &arr, int low, int high)
 {
     int pivot = arr[low];
@@ -91,6 +95,7 @@ int partition(vector<int> &arr, int low, int high)
     return j;
 }
 
+//? Quick Sort (Lomuto Partition) - Avg: O(n log n), Worst: O(n^2)
 void quickSort(vector<int> &arr, int low, int high)
 {
     if (low < high)

@@ -8,6 +8,7 @@ int main()
     int n, maximum = 0;
     cin >> n;
 
+    //? Integer hashing using vector - O(n)
     //* INTEGER HASHING
     vector<int> arr(n);
     for (int i = 0; i < n; i++)
@@ -30,6 +31,7 @@ int main()
 
     cout << "------------------" << endl;
 
+    //? Character hashing using ASCII array - O(n)
     //* CHARACTER HASHING
     string s;
     cin.ignore();
@@ -49,6 +51,7 @@ int main()
     //     cout << c << " --> " << smallCharsHash[c - 'a'] << endl;
     // }
 
+    //? Character hashing using ASCII array - O(n)
     //* all chars
     int charhash[256] = {0};
     for (char i : s)
@@ -78,6 +81,7 @@ int main()
 
     cout << "------------------" << endl;
 
+    //? Hashing using unordered_map - O(n)
     //* Using Map STL
     int m;
     cin >> m;
