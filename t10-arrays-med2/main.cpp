@@ -3,14 +3,14 @@
 #include <unordered_set>
 using namespace std;
 
-# O(n)
+
 void printArr(vector<int> &arr)
 {
     for (int i : arr)
         cout << i << " ";
     cout << endl;
 }
-# O(n*m)
+
 void printMatrix(vector<vector<int>> &arr)
 {
     for (auto i : arr)

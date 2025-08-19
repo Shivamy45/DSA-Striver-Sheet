@@ -33,7 +33,7 @@ Each folder includes:
 | Arrays             | 20       | 5         | ❌ To Do         |
 
 📅 Full daily progress is maintained in my  
-[📒 Notion Habit Tracker](https://www.notion.so/Habit-Tracker-22f822e671bb80c1a0d1c83e821d1761?source=copy_link)
+[📒 Notion Habit Tracker](https://www.notion.so/DSA-Tracker-24e25f3d3520801aab0dc7e58f9ea2d4?source=copy_link)
 
 ---
 
