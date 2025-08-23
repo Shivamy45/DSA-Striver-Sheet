@@ -2,6 +2,8 @@
 #include <set>
 using namespace std;
 
+// ================== Pascal Triangle ==================
+// Time: O(r), Space: O(1)
 void printArr(vector<int> &arr)
 {
 	for (int i : arr)
@@ -9,7 +11,7 @@ void printArr(vector<int> &arr)
 	cout << endl;
 }
 
-// O(r)
+// Time: O(r), Space: O(1)
 long long computeNCR(int n, int r)
 {
 	long long res = 1;
@@ -21,7 +23,7 @@ long long computeNCR(int n, int r)
 	return res;
 }
 
-// O(r)
+// Time: O(r), Space: O(1)
 // Prints value at (r, c) in Pascal's Triangle (1-indexed)
 void printPascalCell(int r, int c)
 {
@@ -33,7 +35,7 @@ void printPascalCell(int r, int c)
 	cout << computeNCR(r - 1, c - 1) << endl;
 }
 
-// O(r)
+// Time: O(r), Space: O(1)
 // Efficiently prints the r-th row of Pascal's Triangle (0-indexed)
 void printPascalRow(int r)
 {
@@ -47,7 +49,7 @@ void printPascalRow(int r)
 	cout << endl;
 }
 
-// O(n^2)
+// Time: O(n^2), Space: O(1)
 // Prints Pascal's Triangle up to n rows
 void printPascalTriangle(int n)
 {
@@ -58,7 +60,9 @@ void printPascalTriangle(int n)
 	}
 }
 
-// O(n)
+// ================== Majority Element Variants ==================
+
+// Time: O(n), Space: O(n)
 // Element present more than N/3 times
 void majorityElement(vector<int> &arr)
 {
@@ -72,7 +76,7 @@ void majorityElement(vector<int> &arr)
 	cout << endl;
 }
 
-// O(n)
+// Time: O(n), Space: O(n)
 // Element present more than N/3 times
 void majorityElement2(vector<int> &arr)
 {
@@ -92,7 +96,7 @@ void majorityElement2(vector<int> &arr)
 	cout << endl;
 }
 
-// O(n)
+// Time: O(n), Space: O(1)
 // Element present more than N/3 times
 void majorityElement3(vector<int> &arr)
 {
@@ -139,6 +143,9 @@ void majorityElement3(vector<int> &arr)
 		cout << el2 << endl;
 }
 
+// ================== Three Sum Variants ==================
+
+// Time: O(n^3), Space: O(number of triplets)
 void threeSum(vector<int> &arr)
 {
 	int n = arr.size();
@@ -161,6 +168,7 @@ void threeSum(vector<int> &arr)
 	}
 }
 
+// Time: O(n^2), Space: O(n)
 void threeSum2(vector<int> &arr)
 {
 	int n = arr.size();
@@ -188,6 +196,7 @@ void threeSum2(vector<int> &arr)
 	}
 }
 
+// Time: O(n^2), Space: O(1)
 void threeSum3(vector<int> &arr)
 {
 	sort(arr.begin(), arr.end());
@@ -225,6 +234,9 @@ void threeSum3(vector<int> &arr)
 	}
 }
 
+// ================== Four Sum Variants ==================
+
+// Time: O(n^4), Space: O(number of quadruplets)
 void fourSum(vector<int> &arr, int target = 0)
 {
 	int n = arr.size();
@@ -247,6 +259,7 @@ void fourSum(vector<int> &arr, int target = 0)
 	}
 }
 
+// Time: O(n^3), Space: O(n)
 void fourSum2(vector<int> &arr, int target = 0)
 {
 	int n = arr.size();
@@ -275,6 +288,7 @@ void fourSum2(vector<int> &arr, int target = 0)
 	}
 }
 
+// Time: O(n^3), Space: O(1)
 void fourSum3(vector<int> arr, int target = 0)
 {
 	sort(arr.begin(), arr.end());
@@ -292,9 +306,9 @@ void fourSum3(vector<int> arr, int target = 0)
 			while (k < l)
 			{
 				int sum = arr[i] + arr[j] + arr[k] + arr[l];
-				if (sum < 0)
+				if (sum < target)
 					k++;
-				else if (sum > 0)
+				else if (sum > target)
 					l--;
 				else
 				{
@@ -317,8 +331,227 @@ void fourSum3(vector<int> arr, int target = 0)
 	}
 }
 
-void fourSum4(vector<int> &arr, int target = 0)
+// ================== Longest Subarray with Sum 0 Variants ==================
+
+// Time: O(n^2), Space: O(1)
+void longestSubArrayWithSum0(vector<int> &arr)
 {
+	int sum = 0, n = arr.size(), res = -1;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = i; j < n; j++)
+		{
+			sum += arr[j];
+			if (sum == 0)
+				res = max(res, j - i + 1);
+		}
+	}
+	cout << res << endl;
+}
+
+// Time: O(n), Space: O(n)
+void longestSubArrayWithSum0_2(vector<int> &arr)
+{
+	int n = arr.size(), res = -1, sum = 0;
+	unordered_map<int, int> mpp;
+	for (int j = 0; j < n; j++)
+	{
+		sum += arr[j];
+		if (sum == 0)
+			res = j + 1;
+		if (mpp.find(sum) != mpp.end())
+			res = max(res, j - mpp[sum]);
+		else
+			mpp[sum] = j;
+	}
+	cout << res << endl;
+}
+
+// ================== XOR Subarray Variants ==================
+// Time: O(n^3), Space: O(1)
+void noOfSubarrayWithXorK(vector<int> &arr, int k)
+{
+	int n = arr.size();
+	int xorr = 0, cnt = 0;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = i; j < n; j++)
+		{
+			xorr = 0;
+			for (int k = i; k <= j; k++)
+				xorr ^= arr[k];
+			if (xorr == k)
+				cnt++;
+		}
+	}
+	cout << cnt << endl;
+}
+// Time: O(n^2), Space: O(1)
+void noOfSubarrayWithXorK_2(vector<int> &arr, int k)
+{
+	int n = arr.size();
+	int xorr = 0, cnt = 0;
+	for (int i = 0; i < n; i++)
+	{
+		xorr = 0;
+		for (int j = i; j < n; j++)
+		{
+			xorr ^= arr[j];
+			if (xorr == k)
+				cnt++;
+		}
+	}
+	cout << cnt << endl;
+}
+// Time: O(n), Space: O(n)
+void noOfSubarrayWithXorK_3(vector<int> &arr, int k)
+{
+	int n = arr.size();
+	int xorr = 0, cnt = 0;
+	unordered_map<int, int> mpp;
+	mpp[0] = 1;
+	for (int i = 0; i < n; i++)
+	{
+		xorr ^= arr[i];
+		// No need as we did mpp[0] = 1;
+		// if (xorr == k)
+		// 	cnt++;
+		cnt += mpp[xorr ^ k]; // if xorr ^ k is not present it will give 0
+		mpp[xorr]++;
+	}
+	cout << cnt << endl;
+}
+
+// ================== Interval Merging Variants ==================
+
+// Time: O(n log n), Space: O(n)
+//! Alternate approach: O(n^2) because of nested loop, less efficient
+void mergeSubInterval(vector<vector<int>> &arr)
+{
+	int n = arr.size();
+	sort(arr.begin(), arr.end());
+	vector<vector<int>> ans;
+	for (int i = 0; i < n; i++)
+	{
+		// select an interval:
+		int start = arr[i][0];
+		int end = arr[i][1];
+
+		// Skip all the merged intervals:
+		if (!ans.empty() && end <= ans.back()[1])
+			continue;
+
+		// check the rest of the intervals:
+		for (int j = i + 1; j < n; j++)
+		{
+			if (arr[j][0] <= end)
+				end = max(end, arr[j][1]);
+			else
+				break;
+		}
+		ans.push_back({start, end});
+	}
+	cout << "Intervals;" << endl;
+	for (auto &it : ans)
+		printArr(it);
+}
+
+// Time: O(n log n), Space: O(n)
+//? Optimal approach: O(n log n) for sorting + O(n) merging
+void mergeSubInterval_2(vector<vector<int>> &arr)
+{
+	sort(arr.begin(), arr.end());
+	vector<vector<int>> res;
+	res.push_back(arr[0]);
+
+	for (int i = 1; i < arr.size(); i++)
+	{
+		if (res.empty() || arr[i][0] > res.back()[1])
+			res.push_back(arr[i]);
+		else
+			res.back()[1] = max(res.back()[1], arr[i][1]);
+	}
+	cout << "Intervals:" << endl;
+	for (auto &it : res)
+		printArr(it);
+}
+
+// ================== Merge Sorted Arrays Variants ==================
+
+// Time: O(n + m), Space: O(n + m)
+void mergeSortedArrays(vector<int> &arr1, int n, vector<int> &arr2, int m)
+{
+	vector<int> res;
+	int i = 0, j = 0;
+	while (i < n && j < m)
+	{
+		if (arr1[i] <= arr2[j])
+			res.push_back(arr1[i++]);
+		else
+			res.push_back(arr2[j++]);
+	}
+	while (i < n)
+		res.push_back(arr1[i++]);
+	while (j < m)
+		res.push_back(arr2[j++]);
+	printArr(res);
+}
+
+// Time: O(n log n + m log m), Space: O(1)
+void mergeSortedArrays_2(vector<int> &arr1, int n, vector<int> &arr2, int m)
+{
+	int i = n - 1, j = 0;
+	while (i >= 0 && j < m)
+	{
+		if (arr1[i] > arr2[j])
+			swap(arr1[i], arr2[j]);
+		else
+			break;
+	}
+	sort(arr1.begin(), arr1.end());
+	sort(arr2.begin(), arr2.end());
+	for (int i = 0; i < n + m; i++)
+		if (i < n)
+			cout << arr1[i] << " ";
+		else
+			cout << arr2[i - n] << " ";
+	cout << endl;
+}
+
+// Time: O((n+m) log(n+m)), Space: O(1)
+// Note: Implementation of Shell sort gap method for merging
+void mergeSortedArrays_3(vector<int> &arr1, int n, vector<int> &arr2, int m)
+{
+	int gap = ceil((n + m) / 2.0);
+	while (gap >= 1)
+	{
+		int i = 0, j = gap;
+		while (j < n + m)
+		{
+			int val1 = (i < n) ? arr1[i] : arr2[i - n];
+			int val2 = (j < n) ? arr1[j] : arr2[j - n];
+			if (val1 > val2)
+			{
+				if (i < n && j < n)
+					swap(arr1[i], arr1[j]);
+				else if (i < n && j >= n)
+					swap(arr1[i], arr2[j - n]);
+				else
+					swap(arr2[i - n], arr2[j - n]);
+			}
+			i++;
+			j++;
+		}
+		if (gap == 1)
+			break;
+		gap = ceil(gap / 2.0);
+	}
+	for (int i = 0; i < n + m; i++)
+		if (i < n)
+			cout << arr1[i] << " ";
+		else
+			cout << arr2[i - n] << " ";
+	cout << endl;
 }
 
 int main()
@@ -365,16 +598,67 @@ int main()
 	for (int &a : arr)
 		cin >> a;
 	printArr(arr);
-	fourSum(arr);
+	fourSum(arr, 8);
 	cout << "---------------------------" << endl;
 	printArr(arr);
-	fourSum2(arr);
+	fourSum2(arr, 8);
 	cout << "---------------------------" << endl;
 	printArr(arr);
 	fourSum3(arr, 8);
 	cout << "---------------------------" << endl;
+	for (int &a : arr)
+		cin >> a;
 	printArr(arr);
-	fourSum4(arr);
+	longestSubArrayWithSum0(arr);
+	cout << "---------------------------" << endl;
+	printArr(arr);
+	longestSubArrayWithSum0_2(arr);
+	cout << "---------------------------" << endl;
+	cin >> n;
+	arr.resize(n);
+	for (int &a : arr)
+		cin >> a;
+	printArr(arr);
+	noOfSubarrayWithXorK(arr, 6);
+	cout << "---------------------------" << endl;
+	printArr(arr);
+	noOfSubarrayWithXorK_2(arr, 6);
+	cout << "---------------------------" << endl;
+	printArr(arr);
+	noOfSubarrayWithXorK_3(arr, 6);
+	cout << "---------------------------" << endl;
+	cin >> n;
+	vector<vector<int>> mat(n, vector<int>(2));
+	for (auto &it : mat)
+		for (int &a : it)
+			cin >> a;
+	for (auto it : mat)
+		printArr(it);
+	mergeSubInterval(mat);
+	cout << "---------------------------" << endl;
+	for (auto it : mat)
+		printArr(it);
+	mergeSubInterval_2(mat);
+	cout << "---------------------------" << endl;
+	int m;
+	cin >> n >> m;
+	vector<int> arr2(n);
+	arr.resize(m);
+	for (int &a : arr2)
+		cin >> a;
+	for (int &a : arr)
+		cin >> a;
+	printArr(arr2);
+	printArr(arr);
+	mergeSortedArrays(arr2, n, arr, m);
+	cout << "---------------------------" << endl;
+	printArr(arr2);
+	printArr(arr);
+	mergeSortedArrays_2(arr2, n, arr, m);
+	cout << "---------------------------" << endl;
+	printArr(arr2);
+	printArr(arr);
+	mergeSortedArrays_3(arr2, n, arr, m);
 	cout << "---------------------------" << endl;
 
 	return 0;
