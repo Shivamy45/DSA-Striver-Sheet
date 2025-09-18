@@ -1,4 +1,5 @@
 #include <iostream>
+
 using namespace std;
 
 int findSqrt(int n)
@@ -149,6 +150,169 @@ int minDays(vector<int> &bloomDay, int m, int k)
 
 int smallestDivisor(vector<int> &nums, int threshold)
 {
+    int low = 1, high = INT_MAX;
+    for (int num : nums)
+        high = min(high, num);
+
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        int sumQo = 0;
+        for (int num : nums)
+            sumQo += ceil((float)num / mid);
+        if (sumQo < threshold)
+        {
+            high = mid - 1;
+        }
+        else
+        {
+            low = mid + 1;
+        }
+    }
+    return low;
+}
+
+int shipWithinDays(vector<int> &weights, int days)
+{
+    long long low = 1, high = INT_MIN;
+    for (long long weight : weights)
+        high = max(high, weight);
+    high *= high;
+    while (low <= high)
+    {
+        long long mid = low + (high - low) / 2;
+        long long currWeight = 0;
+        int day = 0;
+        for (long long weight : weights)
+        {
+            if (currWeight + weight > mid)
+            {
+                day++;
+                currWeight = 0;
+            }
+            currWeight += weight;
+        }
+        if (day <= days)
+            high = mid - 1;
+        else
+            low = mid + 1;
+    }
+    return low;
+}
+
+int findKthPositive(vector<int> &arr, int k)
+{
+    int low = 0, high = arr.size();
+    while (low < high)
+    {
+        int mid = low + (high - low) / 2;
+        int missing = arr[mid] - (mid + 1);
+
+        if (missing < k)
+            low = mid + 1;
+        else
+            high = mid;
+    }
+    return low + k;
+}
+
+bool helperAggresiveCows(vector<int> &stalls, int dist, int cows)
+{
+    int n = stalls.size();
+    int prevCow = stalls[0], cowPlaced = 1;
+    for (int i = 1; i < n; i++)
+    {
+        if (dist <= stalls[i + 1] - prevCow)
+        {
+            cowPlaced++;
+            prevCow = stalls[i + 1];
+        }
+        if (cowPlaced >= cows)
+            return true;
+    }
+    return false;
+}
+
+int aggresiveCows(vector<int> &stalls, int cows)
+{
+    sort(stalls.begin(), stalls.end());
+    int n = stalls.size();
+    int low = 1, high = stalls[n - 1] - stalls[0];
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        if (helperAggresiveCows(stalls, mid, cows))
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return high;
+}
+
+int minimumPagesAllocation(vector<int> &books, int students)
+{
+    int n = books.size();
+    int low = INT_MIN, high = 0;
+    for (int pages : books)
+    {
+        low = max(low, pages);
+        high += pages;
+    }
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        int studentAssigned = 1, pagesAssigned = 0;
+        for (int pages : books)
+        {
+            if (pagesAssigned + pages > mid)
+            {
+                studentAssigned++;
+                pagesAssigned = 0;
+            }
+            pagesAssigned += pages;
+            if (studentAssigned > students)
+                break;
+        }
+        if (studentAssigned > students)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return low;
+}
+
+int helperSplitArray(vector<int> &nums, int maxSum)
+{
+    // To get no. of splits of the array for maxSum(mid)
+    int currSum = 0, splits = 1;
+    for (int num : nums)
+    {
+        if (currSum + num > maxSum)
+        {
+            splits++;
+            currSum = 0;
+        }
+        currSum += num;
+    }
+    return splits;
+}
+int splitArray(vector<int> &nums, int k)
+{
+    int low = INT_MIN, high = 0;
+    for (int num : nums)
+    {
+        low = max(low, num);
+        high += num;
+    }
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        if (helperSplitArray(nums, mid) > k)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return low;
 }
 
 int main()
@@ -184,6 +348,34 @@ int main()
         cin >> a;
     cin >> m;
     cout << smallestDivisor(arr, m) << endl;
+    cout << "--------------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    cin >> m;
+    cout << shipWithinDays(arr, m) << endl;
+    cout << "--------------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    cin >> m;
+    cout << findKthPositive(arr, m) << endl;
+    cout << "--------------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    cin >> m;
+    cout << aggresiveCows(arr, m) << endl;
+    cout << "--------------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    cin >> m;
+    cout << minimumPagesAllocation(arr, m) << endl;
     cout << "--------------------" << endl;
 
     return 0;
