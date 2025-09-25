@@ -1,6 +1,26 @@
+/*
+ * Binary Search and its advanced applications
+ * -------------------------------------------
+ * This file contains implementations of binary search and its various applications,
+ * including searching in rotated arrays, finding bounds, ceil/floor, and special problems.
+ */
+
 #include <iostream>
+#include <vector>
+#include <climits>
 using namespace std;
 
+/* ==========================
+   Basic Binary Search
+   ========================== */
+
+/*
+ * Performs iterative binary search to find the index of target in arr.
+ * Returns index if found, else -1.
+ * Time Complexity: O(log n)
+ * Space Complexity: O(1)
+ * Example: binarySearch(arr, 6)
+ */
 int binarySearch(vector<int> &arr, int target)
 {
     int left = 0, right = arr.size() - 1;
@@ -17,6 +37,13 @@ int binarySearch(vector<int> &arr, int target)
     return -1;
 }
 
+/*
+ * Performs recursive binary search to find the index of target in arr.
+ * Returns index if found, else -1.
+ * Time Complexity: O(log n)
+ * Space Complexity: O(log n) due to recursion stack
+ * Example: binarySeachUsingRecursion(arr, 6, 0, n - 1)
+ */
 int binarySeachUsingRecursion(vector<int> &arr, int target, int low, int high)
 {
     if (low > high)
@@ -30,6 +57,17 @@ int binarySeachUsingRecursion(vector<int> &arr, int target, int low, int high)
         return binarySeachUsingRecursion(arr, target, low, mid - 1);
 }
 
+/* ==========================
+   Bounds (Lower/Upper/Insert Position)
+   ========================== */
+
+/*
+ * Finds the lower bound index of target in arr.
+ * Returns the first index where arr[index] >= target.
+ * Time Complexity: O(log n)
+ * Space Complexity: O(1)
+ * Example: lowerBound(arr, 8)
+ */
 int lowerBound(vector<int> &arr, int target)
 {
     int low = 0, high = arr.size() - 1;
@@ -48,6 +86,13 @@ int lowerBound(vector<int> &arr, int target)
     return ans;
 }
 
+/*
+ * Finds the upper bound index of target in arr.
+ * Returns the first index where arr[index] > target.
+ * Time Complexity: O(log n)
+ * Space Complexity: O(1)
+ * Example: upperBound(arr, 15)
+ */
 int upperBound(vector<int> &arr, int target)
 {
     int n = arr.size();
@@ -67,11 +112,29 @@ int upperBound(vector<int> &arr, int target)
     return ans;
 }
 
+/*
+ * Returns the insert position for target in arr (same as lower bound).
+ * Time Complexity: O(log n)
+ * Space Complexity: O(1)
+ * Example: insertPos(arr, 10)
+ */
 int insertPos(vector<int> &arr, int target)
 {
     return lowerBound(arr, target);
 }
 
+/* ==========================
+   Ceil and Floor
+   ========================== */
+
+/*
+ * Finds and prints the floor and ceil of x in arr.
+ * Floor: greatest element <= x
+ * Ceil: smallest element >= x
+ * Time Complexity: O(log n)
+ * Space Complexity: O(1)
+ * Example: ceilAndFloor(arr, 10)
+ */
 void ceilAndFloor(vector<int> &arr, int x)
 {
     int ceil = 0, floor = 0;
@@ -92,6 +155,18 @@ void ceilAndFloor(vector<int> &arr, int x)
     cout << "Ceil: " << ceil << endl;
 }
 
+/* ==========================
+   First/Last Occurrence and Count
+   ========================== */
+
+/*
+ * Finds the first and last index of x in arr.
+ * Returns pair(firstIndex, lastIndex).
+ * If x not found, returns (-1, -1).
+ * Time Complexity: O(log n)
+ * Space Complexity: O(1)
+ * Example: firstAndLastIdx(arr, 9)
+ */
 pair<int, int> firstAndLastIdx(vector<int> &arr, int x)
 {
     int low = 0, high = arr.size() - 1, first = -1;
@@ -126,6 +201,12 @@ pair<int, int> firstAndLastIdx(vector<int> &arr, int x)
     return make_pair(first, last);
 }
 
+/*
+ * Counts the occurrences of x in arr.
+ * Time Complexity: O(log n)
+ * Space Complexity: O(1)
+ * Example: countOccurence(arr, 9)
+ */
 int countOccurence(vector<int> &arr, int x)
 {
     if (firstAndLastIdx(arr, x).first == -1)
@@ -133,6 +214,17 @@ int countOccurence(vector<int> &arr, int x)
     return firstAndLastIdx(arr, x).second - firstAndLastIdx(arr, x).first + 1;
 }
 
+/* ==========================
+   Rotated Sorted Array
+   ========================== */
+
+/*
+ * Searches for x in a rotated sorted array arr.
+ * Returns index if found, else -1.
+ * Time Complexity: O(log n)
+ * Space Complexity: O(1)
+ * Example: searchEleInRotatedArray(arr, 6)
+ */
 int searchEleInRotatedArray(vector<int> &arr, int x)
 {
     int low = 0, high = arr.size() - 1;
@@ -157,6 +249,13 @@ int searchEleInRotatedArray(vector<int> &arr, int x)
     return -1;
 }
 
+/*
+ * Searches for x in a rotated sorted array arr that may contain duplicates.
+ * Returns true if found, else false.
+ * Time Complexity: O(n) in worst case due to duplicates
+ * Space Complexity: O(1)
+ * Example: searchElementInRotatedArrayWithDuplicates(arr, 1)
+ */
 bool searchElementInRotatedArrayWithDuplicates(vector<int> &arr, int x)
 {
     int low = 0, high = arr.size() - 1;
@@ -185,6 +284,12 @@ bool searchElementInRotatedArrayWithDuplicates(vector<int> &arr, int x)
     return false;
 }
 
+/*
+ * Finds the minimum element in a rotated sorted array arr.
+ * Time Complexity: O(log n)
+ * Space Complexity: O(1)
+ * Example: minElementInRotatedArray(arr)
+ */
 int minElementInRotatedArray(vector<int> &arr)
 {
     int low = 0, high = arr.size() - 1, minVal = INT_MAX;
@@ -214,6 +319,13 @@ int minElementInRotatedArray(vector<int> &arr)
     return minVal;
 }
 
+/*
+ * Finds the number of times the array has been rotated.
+ * Returns the index of the minimum element.
+ * Time Complexity: O(log n)
+ * Space Complexity: O(1)
+ * Example: findArrayRotatedTime(arr)
+ */
 int findArrayRotatedTime(vector<int> &arr)
 {
     int low = 0, high = arr.size() - 1, minIdx = 0;
@@ -247,6 +359,16 @@ int findArrayRotatedTime(vector<int> &arr)
     return minIdx;
 }
 
+/* ==========================
+   Special Binary Search Problems
+   ========================== */
+
+/*
+ * Finds the single non-duplicate element in a sorted array where every other element appears twice.
+ * Time Complexity: O(log n)
+ * Space Complexity: O(1)
+ * Example: singleNonDuplicate(arr)
+ */
 int singleNonDuplicate(vector<int> &arr)
 {
     int n = arr.size();
@@ -277,6 +399,13 @@ int singleNonDuplicate(vector<int> &arr)
     return -1;
 }
 
+/*
+ * Finds the index of a peak element in arr.
+ * A peak element is greater than its neighbors.
+ * Time Complexity: O(log n)
+ * Space Complexity: O(1)
+ * Example: peakElement(arr)
+ */
 int peakElement(vector<int> &arr)
 {
     int n = arr.size();
@@ -337,7 +466,6 @@ int main()
     cout << "---------------------" << endl;
     cout << "Peak element at: " << peakElement(arr) << endl;
     cout << "---------------------" << endl;
-    
 
     return 0;
 }

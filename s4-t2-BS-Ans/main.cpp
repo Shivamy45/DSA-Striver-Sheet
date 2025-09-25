@@ -1,4 +1,5 @@
 #include <iostream>
+#include <numeric>
 
 using namespace std;
 
@@ -315,6 +316,96 @@ int splitArray(vector<int> &nums, int k)
     return low;
 }
 
+int painterPartition(vector<int> &boards, int painter)
+{
+    int n = boards.size();
+    // using in-build func from numeric
+    int low = *max_element(boards.begin(), boards.end());
+    int high = accumulate(boards.begin(), boards.end(), 0);
+    while (low <= high)
+    {
+        int mid = (low + high) / 2;
+        int painterAssigned = 1, boardAssigned = 0;
+        for (int board : boards)
+        {
+            if (boardAssigned + board > mid)
+            {
+                painterAssigned++;
+                boardAssigned = 0;
+            }
+            boardAssigned += board;
+            if (painterAssigned > painter)
+                break;
+        }
+        if (painterAssigned > painter)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return low;
+}
+
+double maxDistBtwGasStations(vector<int> &stations, int k)
+{
+    int n = stations.size();
+    vector<int> alreadyPlaced(n - 1, 0);
+    double maxDiff = INT_MIN, maxDiffIdx = -1;
+    while (k--)
+    {
+        double actualDiff = INT_MIN;
+        maxDiffIdx = -1;
+        maxDiff = INT_MIN;
+        for (int i = 0; i < n - 1; i++)
+        {
+            actualDiff = (stations[i + 1] - stations[i]) / (alreadyPlaced[i] + 1);
+            if (maxDiff < actualDiff)
+            {
+                maxDiff = actualDiff;
+                maxDiffIdx = i;
+            }
+        }
+        cout << maxDiff << " at " << maxDiffIdx << ". " << alreadyPlaced[maxDiffIdx];
+        alreadyPlaced[maxDiffIdx]++;
+        cout << " -> " << alreadyPlaced[maxDiffIdx] << endl;
+    }
+    maxDiff = INT_MIN;
+    for (int i = 0; i < n - 1; i++)
+    {
+        maxDiff = max((double)(stations[i + 1] - stations[i]) / (alreadyPlaced[i] + 1), maxDiff);
+    }
+    return maxDiff;
+}
+
+// Using Priority Queue
+double maxDistBtwGasStations_1(vector<int> &stations, int k)
+{
+    int n = stations.size();
+    vector<int> alreadyPlaced(n - 1, 0);
+    priority_queue<pair<double, int>> pq;
+    for (int i = 0; i < n - 1; i++)
+        pq.push({stations[i + 1] - stations[i], i});
+
+    for (int i = 0; i < k; i++)
+    {
+        auto top = pq.top();
+        pq.pop();
+        cout << top.first << " at " << top.second << ". " << alreadyPlaced[top.second];
+
+        alreadyPlaced[top.second]++;
+        double newStationLen = (double)(stations[top.second + 1] - stations[top.second]) / (alreadyPlaced[top.second] + 1);
+        pq.push({newStationLen, top.second});
+
+        cout << " -> " << alreadyPlaced[top.second] << endl;
+    }
+
+    return pq.top().first;
+}
+
+double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2)
+{
+    return 3.14;
+}
+
 int main()
 {
     int n;
@@ -376,6 +467,32 @@ int main()
         cin >> a;
     cin >> m;
     cout << minimumPagesAllocation(arr, m) << endl;
+    cout << "--------------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    cin >> m;
+    cout << painterPartition(arr, m) << endl;
+    cout << "--------------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    cin >> m;
+    cout << maxDistBtwGasStations(arr, m) << endl;
+    cout << "--------------------" << endl;
+    cout << maxDistBtwGasStations_1(arr, m) << endl;
+    cout << "--------------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    cin >> m;
+    vector<int> arr2(m);
+    for (int &a : arr2)
+        cin >> a;
+    cout << findMedianSortedArrays(arr, arr2) << endl;
     cout << "--------------------" << endl;
 
     return 0;
