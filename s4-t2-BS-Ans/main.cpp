@@ -401,11 +401,155 @@ double maxDistBtwGasStations_1(vector<int> &stations, int k)
     return pq.top().first;
 }
 
-double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2)
+long double maxDistBtwGasStations_2(vector<int> &stations, int k)
 {
-    return 3.14;
+    int n = stations.size();
+    long double low = 0, high = INT_MIN;
+    for (int i = 0; i < n - 1; i++)
+        high = max(high, (long double)stations[i + 1] - stations[i]);
+    long double diff = 1e-6;
+    while (high - low > diff)
+    {
+        long double mid = (low + high) / 2.0;
+        int cnt = 0;
+        for (int i = 0; i < n - 1; i++)
+        {
+            int inBtw = (stations[i + 1] - stations[i]) / mid;
+            if ((stations[i] - stations[i - 1]) == (mid * inBtw))
+            {
+                inBtw--;
+            }
+            cnt += inBtw;
+            if (cnt > k)
+                break;
+        }
+        if (cnt <= k)
+            high = mid;
+        else
+            low = mid;
+    }
+    return high;
 }
 
+double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2)
+{
+    int cnt = 0;
+    int i = 0, j = 0;
+    int n1 = nums1.size(), n2 = nums2.size(), n = n1 + n2;
+    double ele1 = -1, ele2 = -1;
+    while (i < n1 && j < n2)
+    {
+        if (nums1[i] <= nums2[j])
+        {
+            cnt++;
+            if (cnt == n / 2)
+                ele1 = nums1[i];
+            if (cnt - 1 == n / 2)
+            {
+                ele2 = nums1[i];
+                break;
+            }
+            i++;
+        }
+        else
+        {
+            cnt++;
+            if (cnt == n / 2)
+                ele1 = nums2[j];
+            if (cnt - 1 == n / 2)
+            {
+                ele2 = nums2[j];
+                break;
+            }
+            j++;
+        }
+    }
+
+    while (i < n1)
+    {
+        if (cnt == n / 2)
+            ele1 = nums1[i];
+        if (cnt - 1 == n / 2)
+        {
+            ele2 = nums1[i];
+            break;
+        }
+        cnt++;
+        i++;
+    }
+    while (j < n2)
+    {
+        if (cnt == n / 2)
+            ele1 = nums2[j];
+        if (cnt - 1 == n / 2)
+        {
+            ele2 = nums2[j];
+            break;
+        }
+        cnt++;
+        j++;
+    }
+
+    if (n % 2)
+        return ele2;
+    return (ele1 + ele2) / 2;
+}
+
+double findMedianSortedArrays_1(vector<int> &nums1, vector<int> &nums2)
+{
+    int n1 = nums1.size(), n2 = nums2.size();
+    // ensure nums1 is smaller
+    if (n1 > n2)
+        return findMedianSortedArrays_1(nums2, nums1);
+    int n = n1 + n2;
+
+    int low = 0, high = n1;
+    while (low <= high)
+    {
+        int x = (low + high) / 2;
+        int left = n / 2 - x;
+
+        int l1 = (x == 0 ? INT_MIN : nums1[x - 1]);
+        int r1 = (x == n1 ? INT_MAX : nums1[x]);
+        int l2 = (left == 0 ? INT_MIN : nums2[left - 1]);
+        int r2 = (left == n2 ? INT_MAX : nums2[left]);
+
+        if (max(l1, l2) <= min(r1, r2))
+            return (n % 2) ? min(r1, r2) : (max(l1, l2) + min(r1, r2)) / 2.0;
+        else if (l1 > r2)
+            high = x - 1;
+        else
+            low = x + 1;
+    }
+    return -1;
+}
+
+int kthElement(vector<int> &a, vector<int> &b, int k)
+{
+    int n1 = a.size(), n2 = b.size();
+    if (n1 > n2)
+        return kthElement(b, a, k);
+    int n = n1 + n2;
+    int low = max(0, k - n2), high = min(k, n1);
+    while (low <= high)
+    {
+        int x = (low + high) / 2;
+        int left = k - x;
+
+        int l1 = (x == 0 ? INT_MIN : a[x - 1]);
+        int r1 = (x == n1 ? INT_MAX : a[x]);
+        int l2 = (left == 0 ? INT_MIN : b[left - 1]);
+        int r2 = (left == n2 ? INT_MAX : b[left]);
+
+        if (max(l1, l2) <= min(r1, r2))
+            return max(l1, l2);
+        else if (l1 > r2)
+            high = x - 1;
+        else
+            low = x + 1;
+    }
+    return -1;
+}
 int main()
 {
     int n;
@@ -484,6 +628,8 @@ int main()
     cout << "--------------------" << endl;
     cout << maxDistBtwGasStations_1(arr, m) << endl;
     cout << "--------------------" << endl;
+    cout << maxDistBtwGasStations_2(arr, m) << endl;
+    cout << "--------------------" << endl;
     cin >> n;
     arr.resize(n);
     for (int &a : arr)
@@ -493,6 +639,10 @@ int main()
     for (int &a : arr2)
         cin >> a;
     cout << findMedianSortedArrays(arr, arr2) << endl;
+    cout << "--------------------" << endl;
+    cout << findMedianSortedArrays_1(arr, arr2) << endl;
+    cout << "--------------------" << endl;
+    cout << kthElement(arr, arr2, 8) << endl;
     cout << "--------------------" << endl;
 
     return 0;
