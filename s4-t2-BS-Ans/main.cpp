@@ -1,8 +1,14 @@
 #include <iostream>
 #include <numeric>
-
 using namespace std;
 
+// ------------------------------
+// Square Root related functions
+// ------------------------------
+
+// Time Complexity: O(n)
+// Space Complexity: O(1)
+// Explanation: Finds integer square root by linear search.
 int findSqrt(int n)
 {
     int ans = -1;
@@ -16,6 +22,9 @@ int findSqrt(int n)
     return ans;
 }
 
+// Time Complexity: O(log n)
+// Space Complexity: O(1)
+// Explanation: Finds integer square root using binary search.
 int findSqrt_1(int n)
 {
     // int ans = 1;
@@ -37,7 +46,13 @@ int findSqrt_1(int n)
     // return ans;
 }
 
-// Power exponential method:
+// ------------------------------
+// Nth Root related functions
+// ------------------------------
+
+// Time Complexity: O(log exp)
+// Space Complexity: O(1)
+// Explanation: Calculates b^exp efficiently, stops if result exceeds n.
 long long funcPow(int b, int exp, int n)
 {
     long long ans = 1;
@@ -61,6 +76,9 @@ long long funcPow(int b, int exp, int n)
     return ans;
 }
 
+// Time Complexity: O(n)
+// Space Complexity: O(1)
+// Explanation: Finds integer nth root by checking all possibilities.
 int nthRootOfaNumber(int n, int m)
 {
     for (int i = 1; i <= n; i++)
@@ -72,6 +90,9 @@ int nthRootOfaNumber(int n, int m)
     return -1;
 }
 
+// Time Complexity: O(log n * log m)
+// Space Complexity: O(1)
+// Explanation: Finds integer nth root using binary search.
 int nthRootOfaNumber_1(int n, int m)
 {
     int low = 1, high = n;
@@ -89,6 +110,13 @@ int nthRootOfaNumber_1(int n, int m)
     return -1;
 }
 
+// ------------------------------
+// Binary Search Applications
+// ------------------------------
+
+// Time Complexity: O(n log maxPile)
+// Space Complexity: O(1)
+// Explanation: Finds minimum eating speed to finish piles in h hours.
 int minEatingSpeed(vector<int> &piles, int h)
 {
     int high = INT_MIN;
@@ -111,6 +139,9 @@ int minEatingSpeed(vector<int> &piles, int h)
     return low;
 }
 
+// Time Complexity: O(n log maxDay)
+// Space Complexity: O(1)
+// Explanation: Finds minimum days to make m bouquets of k flowers.
 int minDays(vector<int> &bloomDay, int m, int k)
 {
     int low = INT_MAX, high = INT_MIN;
@@ -149,6 +180,9 @@ int minDays(vector<int> &bloomDay, int m, int k)
     return ans;
 }
 
+// Time Complexity: O(n log maxNum)
+// Space Complexity: O(1)
+// Explanation: Finds smallest divisor so sum of quotients <= threshold.
 int smallestDivisor(vector<int> &nums, int threshold)
 {
     int low = 1, high = INT_MAX;
@@ -173,6 +207,9 @@ int smallestDivisor(vector<int> &nums, int threshold)
     return low;
 }
 
+// Time Complexity: O(n log sum(weights))
+// Space Complexity: O(1)
+// Explanation: Finds minimum ship capacity to deliver weights in days.
 int shipWithinDays(vector<int> &weights, int days)
 {
     long long low = 1, high = INT_MIN;
@@ -201,6 +238,9 @@ int shipWithinDays(vector<int> &weights, int days)
     return low;
 }
 
+// Time Complexity: O(log n)
+// Space Complexity: O(1)
+// Explanation: Finds kth missing positive number in sorted array.
 int findKthPositive(vector<int> &arr, int k)
 {
     int low = 0, high = arr.size();
@@ -217,6 +257,13 @@ int findKthPositive(vector<int> &arr, int k)
     return low + k;
 }
 
+// ------------------------------
+// Aggressive Cows & Gas Stations
+// ------------------------------
+
+// Time Complexity: O(n)
+// Space Complexity: O(1)
+// Explanation: Checks if cows can be placed with at least dist apart.
 bool helperAggresiveCows(vector<int> &stalls, int dist, int cows)
 {
     int n = stalls.size();
@@ -234,6 +281,9 @@ bool helperAggresiveCows(vector<int> &stalls, int dist, int cows)
     return false;
 }
 
+// Time Complexity: O(n log(max-min))
+// Space Complexity: O(1)
+// Explanation: Finds largest minimum distance for placing cows.
 int aggresiveCows(vector<int> &stalls, int cows)
 {
     sort(stalls.begin(), stalls.end());
@@ -250,6 +300,13 @@ int aggresiveCows(vector<int> &stalls, int cows)
     return high;
 }
 
+// ------------------------------
+// Allocation & Partition Problems
+// ------------------------------
+
+// Time Complexity: O(n log sum(books))
+// Space Complexity: O(1)
+// Explanation: Allocates minimum pages to students using binary search.
 int minimumPagesAllocation(vector<int> &books, int students)
 {
     int n = books.size();
@@ -282,6 +339,9 @@ int minimumPagesAllocation(vector<int> &books, int students)
     return low;
 }
 
+// Time Complexity: O(n)
+// Space Complexity: O(1)
+// Explanation: Returns number of splits needed for maxSum.
 int helperSplitArray(vector<int> &nums, int maxSum)
 {
     // To get no. of splits of the array for maxSum(mid)
@@ -297,6 +357,10 @@ int helperSplitArray(vector<int> &nums, int maxSum)
     }
     return splits;
 }
+
+// Time Complexity: O(n log sum(nums))
+// Space Complexity: O(1)
+// Explanation: Splits array into k subarrays with minimized largest sum.
 int splitArray(vector<int> &nums, int k)
 {
     int low = INT_MIN, high = 0;
@@ -316,6 +380,9 @@ int splitArray(vector<int> &nums, int k)
     return low;
 }
 
+// Time Complexity: O(n log sum(boards))
+// Space Complexity: O(1)
+// Explanation: Allocates boards to painters minimizing max time.
 int painterPartition(vector<int> &boards, int painter)
 {
     int n = boards.size();
@@ -345,6 +412,13 @@ int painterPartition(vector<int> &boards, int painter)
     return low;
 }
 
+// ------------------------------
+// Gas Stations Problems
+// ------------------------------
+
+// Time Complexity: O(k * n)
+// Space Complexity: O(n)
+// Explanation: Places k gas stations to minimize max distance (greedy).
 double maxDistBtwGasStations(vector<int> &stations, int k)
 {
     int n = stations.size();
@@ -376,7 +450,9 @@ double maxDistBtwGasStations(vector<int> &stations, int k)
     return maxDiff;
 }
 
-// Using Priority Queue
+// Time Complexity: O(k log n)
+// Space Complexity: O(n)
+// Explanation: Places k gas stations using priority queue for efficiency.
 double maxDistBtwGasStations_1(vector<int> &stations, int k)
 {
     int n = stations.size();
@@ -401,6 +477,9 @@ double maxDistBtwGasStations_1(vector<int> &stations, int k)
     return pq.top().first;
 }
 
+// Time Complexity: O(n log(max-min))
+// Space Complexity: O(1)
+// Explanation: Places k gas stations using binary search for precision.
 long double maxDistBtwGasStations_2(vector<int> &stations, int k)
 {
     int n = stations.size();
@@ -431,6 +510,13 @@ long double maxDistBtwGasStations_2(vector<int> &stations, int k)
     return high;
 }
 
+// ------------------------------
+// Median & Kth Element Problems
+// ------------------------------
+
+// Time Complexity: O(n1 + n2)
+// Space Complexity: O(1)
+// Explanation: Finds median of two sorted arrays by merging.
 double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2)
 {
     int cnt = 0;
@@ -495,6 +581,9 @@ double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2)
     return (ele1 + ele2) / 2;
 }
 
+// Time Complexity: O(log(min(n1, n2)))
+// Space Complexity: O(1)
+// Explanation: Finds median of two sorted arrays using binary search.
 double findMedianSortedArrays_1(vector<int> &nums1, vector<int> &nums2)
 {
     int n1 = nums1.size(), n2 = nums2.size();
@@ -524,6 +613,9 @@ double findMedianSortedArrays_1(vector<int> &nums1, vector<int> &nums2)
     return -1;
 }
 
+// Time Complexity: O(log(min(n1, n2)))
+// Space Complexity: O(1)
+// Explanation: Finds kth element in two sorted arrays using binary search.
 int kthElement(vector<int> &a, vector<int> &b, int k)
 {
     int n1 = a.size(), n2 = b.size();
@@ -550,6 +642,14 @@ int kthElement(vector<int> &a, vector<int> &b, int k)
     }
     return -1;
 }
+
+// ------------------------------
+// Driver Code (Testing all above functions)
+// ------------------------------
+
+// Time Complexity: O(1)
+// Space Complexity: O(1)
+// Explanation: Main function to test all implemented algorithms.
 int main()
 {
     int n;
