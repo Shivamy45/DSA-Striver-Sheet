@@ -47,7 +47,26 @@ int maxDepth(string s)
 
 int romanToInt(string s)
 {
-    return -1;
+    int n = s.length();
+    unordered_map<char, int> roman = {
+        {'I', 1},
+        {'V', 5},
+        {'X', 10},
+        {'L', 50},
+        {'C', 100},
+        {'D', 500},
+        {'M', 1000},
+    };
+    int number = 0, value;
+    for (int i = 0; i < n - 1; i++)
+    {
+        if (roman[s[i]] < roman[s[i + 1]])
+            number -= roman[s[i]];
+        else
+            number += roman[s[i]];
+    }
+    number += roman[s[n - 1]];
+    return number;
 }
 
 int myAtoi(string s)
@@ -142,7 +161,26 @@ string longestPalindrome(string s)
 
 int beautySum(string s)
 {
-    return -1;
+    int n = s.length(), sum = 0;
+    vector<int> freq(26, 0);
+    for (int i = 0; i < n; i++)
+    {
+        fill(freq.begin(), freq.end(), 0);
+        for (int j = i; j < n; j++)
+        {
+            freq[s[j] - 'a']++;
+            int minFreq = INT_MAX, maxFreq = INT_MIN;
+            for (int count : freq)
+            {
+                if (count == 0)
+                    continue;
+                minFreq = min(minFreq, count);
+                maxFreq = max(maxFreq, count);
+            }
+            sum += (maxFreq - minFreq);
+        }
+    }
+    return sum;
 }
 
 string reverseWords(string s)
