@@ -47,6 +47,7 @@ int maxDepth(string s)
 
 int romanToInt(string s)
 {
+    return -1;
 }
 
 int myAtoi(string s)
@@ -107,6 +108,41 @@ int countSubStrings(string s, int k)
 {
     int n = s.length();
     return atMostKDistinct(s, k, n) - atMostKDistinct(s, k - 1, n);
+}
+
+int expandFromCenter(string s, int left, int right)
+{
+    int n = s.length();
+    while (left >= 0 && right < n && s[left] == s[right])
+    {
+        left--;
+        right++;
+    }
+    return right - left - 1;
+}
+
+string longestPalindrome(string s)
+{
+    int n = s.length();
+    int start = 0, end = 0;
+    for (int center = 0; center < n; center++)
+    {
+        int oddSize = expandFromCenter(s, center, center);
+        int evenSize = expandFromCenter(s, center, center + 1);
+        int res = max(evenSize, oddSize);
+
+        if (res > end - start)
+        {
+            start = center - (res - 1) / 2;
+            end = center + res / 2;
+        }
+    }
+    return s.substr(start, end - start + 1);
+}
+
+int beautySum(string s)
+{
+    return -1;
 }
 
 string reverseWords(string s)
@@ -182,6 +218,9 @@ int main()
     cout << maxDepth(s) << endl;
     cout << "-------------------" << endl;
     getline(cin, s);
+    cout << romanToInt(s) << endl;
+    cout << "-------------------" << endl;
+    getline(cin, s);
     cout << myAtoi(s) << endl;
     cout << "-------------------" << endl;
     getline(cin, s);
@@ -190,6 +229,12 @@ int main()
     cout << countSubStrings(s, k) << endl;
     cout << "-------------------" << endl;
     cin.ignore();
+    getline(cin, s);
+    cout << longestPalindrome(s) << endl;
+    cout << "-------------------" << endl;
+    getline(cin, s);
+    cout << beautySum(s) << endl;
+    cout << "-------------------" << endl;
     getline(cin, s);
     cout << reverseWords(s) << endl;
     cout << "-------------------" << endl;
