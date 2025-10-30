@@ -13,6 +13,7 @@
         "vector": "cpp",
         "unordered_map": "cpp",
         "complex": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "new": "cpp"
     }
 }
