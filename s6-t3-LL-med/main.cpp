@@ -1,14 +1,16 @@
 #include <iostream>
+#include <stack>
+#include <unordered_set>
 using namespace std;
 
 class ListNode
 {
 public:
-    int data;
+    int val;
     ListNode *next;
-    ListNode(int val, ListNode *next1 = nullptr)
+    ListNode(int val1, ListNode *next1 = nullptr)
     {
-        data = val;
+        val = val1;
         next = next1;
     }
 };
@@ -31,10 +33,10 @@ void printLL(ListNode *head)
     ListNode *temp = head;
     while (temp->next != nullptr)
     {
-        cout << temp->data << " -> ";
+        cout << temp->val << " -> ";
         temp = temp->next;
     }
-    cout << temp->data << endl;
+    cout << temp->val << endl;
 }
 
 ListNode *middleNode(ListNode *head)
@@ -162,15 +164,50 @@ int lengthOfLoop(ListNode *head)
 
 bool isPalindrome(ListNode *head)
 {
+    stack<int> st;
     ListNode *temp = head;
-    string s = "", s2 = "";
     while (temp)
     {
-        s += temp->data;
-        s2 = to_string(temp->data) + s2;
+        st.push(temp->val);
         temp = temp->next;
     }
-    return s == s2;
+    temp = head;
+    while (temp)
+    {
+        if (temp->val != st.top())
+            return false;
+        st.pop();
+        temp = temp->next;
+    }
+    return true;
+}
+
+bool isPalindrome_1(ListNode *head)
+{
+    if (!head || !head->next)
+        return true;
+
+    ListNode *slow, *fast, *first;
+    slow = fast = first = head;
+    while (fast->next && fast->next->next)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    ListNode *newHead = reverseList(slow->next);
+    slow = slow->next;
+    while (slow)
+    {
+        if (first->val != slow->val)
+        {
+            reverseList(newHead);
+            return false;
+        }
+        first = first->next;
+        slow = slow->next;
+    }
+    reverseList(newHead);
+    return true;
 }
 
 ListNode *oddEvenList(ListNode *head)
@@ -209,8 +246,9 @@ ListNode *removeNthFromEnd(ListNode *head, int n)
     return head;
 }
 
-ListNode *removeNthFromEnd_1(ListNode *head, int n) {
-    if(!head)
+ListNode *removeNthFromEnd_1(ListNode *head, int n)
+{
+    if (!head)
         return nullptr;
     ListNode *dummy = new ListNode(0, head);
     ListNode *slow = dummy, *fast = dummy;
@@ -227,7 +265,7 @@ ListNode *removeNthFromEnd_1(ListNode *head, int n) {
 
 ListNode *deleteMiddle(ListNode *head)
 {
-    if(!head || !head->next)
+    if (!head || !head->next)
         return nullptr;
     ListNode *slow, *fast, *prev;
     prev = slow = fast = head;
@@ -242,6 +280,82 @@ ListNode *deleteMiddle(ListNode *head)
     return head;
 }
 
+ListNode *sortList(ListNode *head)
+{
+    ListNode *temp1 = head, *temp2 = head;
+    while (temp1 != nullptr)
+    {
+        bool swapped = false;
+        temp2 = temp1->next;
+        while (temp2 != nullptr)
+        {
+            if (temp1->val > temp2->val)
+            {
+                swap(temp1->val, temp2->val);
+            }
+            temp2 = temp2->next;
+        }
+        temp1 = temp1->next;
+    }
+    return head;
+}
+ListNode *helperMergeList(ListNode *temp1, ListNode *temp2)
+{
+    ListNode *dummyHead = new ListNode(-1);
+    ListNode *temp = dummyHead;
+    while (temp1 != nullptr && temp2 != nullptr)
+    {
+        if (temp1->val <= temp2->val)
+        {
+            temp->next = temp1;
+            temp1 = temp1->next;
+        }
+        else
+        {
+            temp->next = temp2;
+            temp2 = temp2->next;
+        }
+        temp = temp->next;
+    }
+    if (temp1 == nullptr)
+    {
+        temp->next = temp2;
+    }
+    else
+    {
+        temp->next = temp1;
+    }
+    return dummyHead->next;
+}
+
+ListNode *helperMiddle(ListNode *head)
+{
+    if (head == nullptr || head->next == nullptr)
+    {
+        return head;
+    }
+    ListNode *slow = head, *fast = head->next;
+    while (fast && fast->next)
+    {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
+}
+
+ListNode *sortList_1(ListNode *head)
+{
+    if (!head || !head->next)
+        return head;
+
+    ListNode *middle = helperMiddle(head);
+    ListNode *right = middle->next;
+    middle->next = nullptr;
+    ListNode *left = sortList_1(head);
+    right = sortList_1(right);
+    return helperMergeList(left, right);
+}
+
 ListNode *sortLL1s2s3s(ListNode *head)
 {
     if (head == nullptr || head->next == nullptr)
@@ -254,17 +368,17 @@ ListNode *sortLL1s2s3s(ListNode *head)
     ListNode *temp = head;
     while (temp != nullptr)
     {
-        if (temp->data == 0)
+        if (temp->val == 0)
         {
             zero->next = temp;
             zero = temp;
         }
-        else if (temp->data == 1)
+        else if (temp->val == 1)
         {
             one->next = temp;
             one = temp;
         }
-        else if (temp->data == 2)
+        else if (temp->val == 2)
         {
             two->next = temp;
             two = temp;
@@ -277,6 +391,131 @@ ListNode *sortLL1s2s3s(ListNode *head)
     return zeroHead->next;
 }
 
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB)
+{
+    unordered_set<ListNode *> sett;
+    ListNode *t1 = headA, *t2 = headB;
+    while (t1 != nullptr)
+    {
+        sett.insert(t1);
+        t1 = t1->next;
+    }
+    while (t2 != nullptr)
+    {
+        if (sett.find(t2) != sett.end())
+            return t2;
+        t2 = t2->next;
+    }
+    return nullptr;
+}
+
+ListNode *getIntersectionNode_1(ListNode *headA, ListNode *headB)
+{
+    ListNode *t1 = headA, *t2 = headB;
+    int n = 0, m = 0;
+    while (t1)
+    {
+        m++;
+        t1 = t1->next;
+    }
+    while (t2)
+    {
+        n++;
+        t2 = t2->next;
+    }
+    t1 = headA;
+    t2 = headB;
+    for (int i = 0; i < abs(m - n); i++)
+        if (m > n)
+            t1 = t1->next;
+        else
+            t2 = t2->next;
+    while (t1 != t2)
+    {
+        t1 = t1->next;
+        t2 = t2->next;
+    }
+    if (t1 == t2)
+        return t1;
+    return nullptr;
+}
+
+ListNode *getIntersectionNode_2(ListNode *headA, ListNode *headB)
+{
+    ListNode *t1 = headA, *t2 = headB;
+    while (t1 != t2)
+    {
+        t1 = (t1 != nullptr) ? t1->next : headB;
+        t2 = (t2 != nullptr) ? t2->next : headA;
+    }
+    return t1;
+}
+
+ListNode *addOne(ListNode *head)
+{
+    if (!head)
+        return nullptr;
+    ListNode *dummyHead = new ListNode(1, head);
+    ListNode *prev = dummyHead, *temp = head;
+    while (temp->next != nullptr)
+    {
+        if (temp->val != 9)
+            prev = temp;
+        temp = temp->next;
+    }
+    if (temp->val == 9)
+    {
+        temp = prev->next;
+        while (temp != nullptr)
+        {
+            temp->val = 0;
+            temp = temp->next;
+        }
+        if (prev == dummyHead)
+            return dummyHead;
+        prev->val += 1;
+    }
+    else
+        temp->val += 1;
+    return head;
+}
+
+ListNode *addOne_1(ListNode *head)
+{
+    head = reverseList(head);
+    ListNode *temp = head;
+    int carry = 1;
+    while (temp && carry)
+    {
+        int sum = temp->val + carry;
+        carry = sum / 10;
+        temp->val = sum % 10;
+        if (!temp->next && carry)
+            temp->next = new ListNode(0); // creates a extra node for the carry
+        temp = temp->next;
+    }
+    head = reverseList(head);
+    return head;
+}
+int helperRecAddOne(ListNode *head)
+{
+    if (!head)
+        return 1;
+    int carry = helperRecAddOne(head->next);
+    int sum = head->val + carry;
+    carry = sum / 10;
+    head->val = sum % 10;
+    return carry;
+}
+
+ListNode *addOne_2(ListNode *head)
+{
+    int carry = helperRecAddOne(head);
+    if (carry)
+        return new ListNode(carry, head);
+    return head;
+}
+
 ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
 {
     ListNode *head = new ListNode(-1);
@@ -285,7 +524,7 @@ ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
 
     while (l1 != nullptr && l2 != nullptr)
     {
-        sum = l1->data + l2->data + carry;
+        sum = l1->val + l2->val + carry;
         carry = sum / 10;
         sum %= 10;
         ListNode *newNode = new ListNode(sum);
@@ -296,7 +535,7 @@ ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
     }
     while (l1 != nullptr)
     {
-        sum = l1->data + carry;
+        sum = l1->val + carry;
         carry = sum / 10;
         sum %= 10;
         ListNode *newNode = new ListNode(sum);
@@ -306,7 +545,7 @@ ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
     }
     while (l2 != nullptr)
     {
-        sum = l2->data + carry;
+        sum = l2->val + carry;
         carry = sum / 10;
         sum %= 10;
         ListNode *newNode = new ListNode(sum);
@@ -335,7 +574,7 @@ int main()
     printLL(head);
     cout << "---------------------------" << endl;
 
-    cout << middleNode(head)->data << endl;
+    cout << middleNode(head)->val << endl;
     cout << "---------------------------" << endl;
 
     head = reverseList(head);
@@ -364,8 +603,11 @@ int main()
 
     cout << lengthOfLoop(cycleHead) << endl;
     cout << "---------------------------" << endl;
-    
+
     cout << isPalindrome(head) << endl;
+    cout << "---------------------------" << endl;
+
+    cout << isPalindrome_1(head) << endl;
     cout << "---------------------------" << endl;
 
     printLL(head);
@@ -385,26 +627,49 @@ int main()
 
     cin >> n;
     arr.resize(n);
-    // for (int &a : arr)
-    //     cin >> a;
-    // ListNode *headSort = convertArrToLL(arr);
-    // printLL(headSort);
-    // headSort = sortLL(headSort);
-    // printLL(headSort);
-    // cout << "---------------------------" << endl;
-
     for (int &a : arr)
         cin >> a;
     ListNode *headSort = convertArrToLL(arr);
     printLL(headSort);
+    headSort = sortList(headSort);
+    printLL(headSort);
+    cout << "---------------------------" << endl;
+
+    headSort = convertArrToLL(arr);
+    printLL(headSort);
+    headSort = sortList_1(headSort);
+    printLL(headSort);
+    cout << "---------------------------" << endl;
+
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    headSort = convertArrToLL(arr);
+    printLL(headSort);
     headSort = sortLL1s2s3s(headSort);
     printLL(headSort);
     cout << "---------------------------" << endl;
-    
 
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    head = convertArrToLL(arr);
+    printLL(head);
+    head = addOne(head);
+    printLL(head);
+    cout << "---------------------------" << endl;
 
+    printLL(head);
+    head = addOne_1(head);
+    printLL(head);
+    cout << "---------------------------" << endl;
 
-    
+    printLL(head);
+    head = addOne_2(head);
+    printLL(head);
+    cout << "---------------------------" << endl;
 
     cin >> n;
     arr.resize(n);
