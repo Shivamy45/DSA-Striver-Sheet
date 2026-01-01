@@ -1,49 +1,25 @@
 #include <iostream>
 using namespace std;
 
-void sort0and1(vector<int> &arr)
+int lastFibo(int n)
 {
-    int n = arr.size();
-    int i = 0, j = 0;
-    while (j < n)
+    if(n <= 1)
+        return n;
+    long long a = 0, b = 1, c, i;
+    for (i = 2; i <= n; i++)
     {
-        if (arr[j] == 0)
-        {
-            swap(arr[i], arr[j]);
-            i++;
-        }
-        j++;
+        c = (a + b) % 10;
+        a = b;
+        b = c;
     }
-}
-
-Node *s(Node *root)
-{
-    Node *temp = root;
-    temp = temp->left;
-    while (temp->right != nullptr)
-    {
-        temp = temp->right;
-    }
-    return temp;
+    cout << i - 1 << endl;
+    return b;
 }
 
 int main()
 {
     int n;
     cin >> n;
-    vector<int> arr(n);
-    for (int &a : arr)
-        cin >> a;
-
-    sort0and1(arr);
-    for (int num : arr)
-        cout << num << " ";
+    cout << lastFibo(n);
     return 0;
 }
-
-/*
-1d array
-0/1 combo
-
-sort 0, 1
-*/

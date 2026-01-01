@@ -504,7 +504,12 @@ void mergeSortedArrays_2(vector<int> &arr1, int n, vector<int> &arr2, int m)
 	while (i >= 0 && j < m)
 	{
 		if (arr1[i] > arr2[j])
+		{
+
 			swap(arr1[i], arr2[j]);
+			i--;
+			j++;
+		}
 		else
 			break;
 	}
@@ -552,6 +557,37 @@ void mergeSortedArrays_3(vector<int> &arr1, int n, vector<int> &arr2, int m)
 		else
 			cout << arr2[i - n] << " ";
 	cout << endl;
+}
+
+// This is on Leetcode in which we need to merge the array into 1 array without extra space
+void mergeWithoutSpace(vector<int> &nums1, int m, vector<int> &nums2, int n)
+{
+	if (m == 0)
+	{
+		nums1 = nums2;
+		return;
+	}
+	if (n == 0)
+		return;
+	int r = m + n - 1, i = m - 1, j = n - 1;
+	while (i >= 0 && j >= 0)
+	{
+		if (nums1[i] > nums2[j])
+		{
+			nums1[r] = nums1[i];
+			i--;
+		}
+		else
+		{
+			nums1[r] = nums2[j];
+			j--;
+		}
+		r--;
+	}
+	while (j >= 0)
+	{
+		nums1[r--] = nums2[j--];
+	}
 }
 
 int main()
@@ -659,6 +695,19 @@ int main()
 	printArr(arr2);
 	printArr(arr);
 	mergeSortedArrays_3(arr2, n, arr, m);
+	cout << "---------------------------" << endl;
+
+	cin >> n >> m;
+	vector<int> arr3(n + m, 0);
+	arr.resize(m);
+	for (int i = 0; i < n; i++)
+		cin >> arr3[i];
+	for (int &a : arr)
+		cin >> a;
+	printArr(arr3);
+	printArr(arr);
+	mergeWithoutSpace(arr3, n, arr, m);
+	printArr(arr3);
 	cout << "---------------------------" << endl;
 
 	return 0;
