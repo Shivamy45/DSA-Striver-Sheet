@@ -1,25 +1,45 @@
 #include <iostream>
 using namespace std;
 
-int lastFibo(int n)
+struct TreeNode
 {
-    if(n <= 1)
-        return n;
-    long long a = 0, b = 1, c, i;
-    for (i = 2; i <= n; i++)
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x)
     {
-        c = (a + b) % 10;
-        a = b;
-        b = c;
+        val = x;
+        left = nullptr;
+        right = nullptr;
     }
-    cout << i - 1 << endl;
-    return b;
-}
+};
+
+class Solution
+{
+public:
+    int MOD = 1e9 + 7;
+    int totalSum(TreeNode *root)
+    {
+        if (!root)
+            return 0;
+        return root->val + totalSum(root->left) + totalSum(root->right);
+    }
+    
+    int maxProduct(TreeNode *root)
+    {
+        
+    }
+};
 
 int main()
 {
-    int n;
-    cin >> n;
-    cout << lastFibo(n);
+    TreeNode *root = new TreeNode(1);
+    root->left = new TreeNode(1);
+    root->right = new TreeNode(0);
+    root->left->left = new TreeNode(7);
+    root->left->right = new TreeNode(-8);
+    root->right->left = new TreeNode(-7);
+    root->right->right = new TreeNode(9);
+    cout << maxLevelSum(root);
     return 0;
 }
