@@ -151,11 +151,11 @@ public:
 };
 
 // Stack using Queue
-class MyStack
+class MyStack2
 {
 public:
     queue<int> qt;
-    MyStack()
+    MyStack2()
     {
     }
 
@@ -189,11 +189,11 @@ public:
 };
 
 // Queue using two stack
-class MyQueue
+class MyQueue2
 {
 public:
     stack<int> s1, s2;
-    MyQueue()
+    MyQueue2()
     {
     }
 
@@ -519,6 +519,26 @@ int main()
     cin.ignore();
     getline(cin, brackets);
     cout << isValid(brackets) << endl;
+    cout << "-----------------------" << endl;
+
+    MinStack *minSt = new MinStack();
+    while (1)
+    {
+        cin >> op;
+        if (op == 1)
+        {
+            cin >> val;
+            minSt->push(val);
+        }
+        else if (op == 2)
+            minSt->pop();
+        else if (op == 3)
+            cout << minSt->top() << endl;
+        else if (op == 4)
+            cout << minSt->getMin() << endl;
+        else
+            break;
+    }
     cout << "-----------------------" << endl;
 
     return 0;
