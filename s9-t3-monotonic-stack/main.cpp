@@ -227,23 +227,111 @@ long long subArrayRanges2(vector<int> &nums)
             nge[i] = st.top();
         st.push(i);
     }
-    // for (int i = 0; i < n; i++)
-    // {
-    //     cout << nums[i] << endl;
-    //     cout << " psee:" << psee[i] << endl;
-    //     cout << " nse:" << nse[i] << endl;
-    //     cout << " pgee:" << pgee[i] << endl;
-    //     cout << " nge:" << nge[i] << endl;
-    // }
     long long res = 0;
     for (int i = 0; i < n; i++)
     {
         long long maxNum = ((pgee[i] == -1) ? i + 1 : i - pgee[i]) *
-                     ((nge[i] == -1) ? n - i : nge[i] - i);
+                           ((nge[i] == -1) ? n - i : nge[i] - i);
         long long minNum = ((psee[i] == -1) ? i + 1 : i - psee[i]) *
-                     ((nse[i] == -1) ? n - i : nse[i] - i);
-        // cout << nums[i] << " " << maxNum << " " << minNum << endl;
+                           ((nse[i] == -1) ? n - i : nse[i] - i);
         res += nums[i] * (maxNum - minNum);
+    }
+    return res;
+}
+
+string removeKdigits(string num, int k)
+{
+    stack<char> st;
+    for (char &c : num)
+    {
+        while (k > 0 && !st.empty() && st.top() > c)
+        {
+            st.pop();
+            k--;
+        }
+        st.push(c);
+    }
+    while (k > 0 && !st.empty())
+    {
+        st.pop();
+        k--;
+    }
+    string res;
+    while (!st.empty())
+    {
+        res.push_back(st.top());
+        st.pop();
+    }
+
+    reverse(res.begin(), res.end());
+
+    int i = 0;
+    while (i < res.size() && res[i] == '0')
+        i++;
+    res = res.substr(i);
+
+    return res.empty() ? "0" : res;
+}
+
+int largestRectangleArea(vector<int> &heights)
+{
+    int n = heights.size();
+    stack<int> st;
+    vector<int> rightSmaller(n, n - 1);
+    for (int i = n - 1; i >= 0; i--)
+    {
+        while (!st.empty() && heights[st.top()] >= heights[i])
+            st.pop();
+        if (!st.empty())
+            rightSmaller[i] = st.top() - 1;
+        st.push(i);
+    }
+    st = stack<int>();
+    vector<int> leftSmaller(n, 0);
+    for (int i = 0; i < n; i++)
+    {
+        while (!st.empty() && heights[st.top()] >= heights[i])
+            st.pop();
+        if (!st.empty())
+            leftSmaller[i] = st.top() + 1;
+        st.push(i);
+    }
+    int res = INT_MIN;
+    for (int i = 0; i < n; i++)
+    {
+        res = max(res, ((rightSmaller[i] - leftSmaller[i] + 1) * heights[i]));
+    }
+    return res;
+}
+int largestRectangleArea2(vector<int> &heights)
+{
+    int n = heights.size();
+    stack<int> st;
+    int res = 0;
+    for (int i = 0; i <= n; i++)
+    {
+        while (!st.empty() && (i == n || heights[st.top()] >= heights[i]))
+        {
+            int h = heights[st.top()];
+            st.pop();
+            int w = (st.empty() ? i : i - st.top() - 1);
+            res = max(res, h * w);
+        }
+        st.push(i);
+    }
+    return res;
+}
+
+int maximalRectangle(vector<vector<char>> &matrix)
+{
+    int n = matrix.size(), m = matrix[0].size();
+    vector<int> hist(m);
+    int res = 0;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+            hist[j] = (matrix[i][j] == '0' ? 0 : hist[j] + 1);
+        res = max(res, largestRectangleArea2(hist));
     }
     return res;
 }
@@ -322,6 +410,31 @@ int main()
     cout << "--------------------------" << endl;
 
     cout << subArrayRanges2(nums1) << endl;
+    cout << "--------------------------" << endl;
+
+    string s;
+    cin.ignore();
+    getline(cin, s);
+    cin >> n;
+    cout << removeKdigits(s, n) << endl;
+    cout << "--------------------------" << endl;
+
+    cin >> n;
+    nums1.resize(n);
+    for (int &a : nums1)
+        cin >> a;
+    cout << largestRectangleArea(nums1) << endl;
+    cout << "--------------------------" << endl;
+
+    cout << largestRectangleArea2(nums1) << endl;
+    cout << "--------------------------" << endl;
+
+    cin >> n >> m;
+    vector<vector<char>> matrix(n, vector<char>(m));
+    for (auto &it : matrix)
+        for (char &a : it)
+            cin >> a;
+    cout << maximalRectangle(matrix) << endl;
     cout << "--------------------------" << endl;
 
     return 0;

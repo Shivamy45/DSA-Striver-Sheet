@@ -5,92 +5,49 @@
 #include <queue>
 using namespace std;
 
-using ll = long long;
-
-int minimumPairRemoval(vector<int> &nums)
+int helper(vector<vector<pair<int, int>>> &g, int node, int n, vector<bool> &isvisited)
 {
-    int n = nums.size();
-    if (n <= 1)
+    if (node == n - 1)
         return 0;
-
-    vector<ll> arr(nums.begin(), nums.end());
-    vector<bool> removed(n, false);
-    priority_queue<pair<ll, int>, vector<pair<ll, int>>, greater<>> pq;
-
-    int sorted = 0;
-    for (int i = 1; i < n; ++i)
+    int minCost = INT_MAX;
+    for (auto &x : g[node])
     {
-        pq.emplace(arr[i - 1] + arr[i], i - 1);
-        if (arr[i] >= arr[i - 1])
-            sorted++;
+        if (!isvisited[x.first])
+        {
+            isvisited[x.first] = true;
+            if (helper(g, x.first, n, isvisited) != -1)
+                minCost = min(minCost, x.second + helper(g, x.first, n, isvisited));
+            isvisited[x.first] = false;
+        }
     }
-    if (sorted == n - 1)
-        return 0;
+    return (minCost == INT_MAX) ? -1 : minCost;
+}
 
-    int rem = n;
-    vector<int> prev(n), next(n);
-    for (int i = 0; i < n; ++i)
+int minCost(int n, vector<vector<int>> &edges)
+{
+    vector<vector<pair<int, int>>> g(n);
+    for (auto &it : edges)
     {
-        prev[i] = i - 1;
-        next[i] = i + 1;
+        g[it[0]].push_back(make_pair(it[1], it[2]));
+        g[it[1]].push_back(make_pair(it[0], it[2] * 2));
     }
-
-    while (rem > 1)
+    for (int i = 0; i < n; i++)
     {
-        auto [sum, left] = pq.top();
-        pq.pop();
-        int right = next[left];
-        if (right >= n || removed[left] || removed[right] ||
-            arr[left] + arr[right] != sum)
-            continue;
-
-        int pre = prev[left];
-        int nxt = next[right];
-
-        if (arr[left] <= arr[right])
-            sorted--;
-        if (pre != -1 && arr[pre] <= arr[left])
-            sorted--;
-        if (nxt != n && arr[right] <= arr[nxt])
-            sorted--;
-
-        arr[left] += arr[right];
-        removed[right] = true;
-        rem--;
-
-        if (pre == -1)
+        cout << i << ":" << endl;
+        for (auto &x : g[i])
         {
-            prev[left] = -1;
+            cout << x.first << ", " << x.second << endl;
         }
-        else
-        {
-            pq.emplace(arr[pre] + arr[left], pre);
-            if (arr[pre] <= arr[left])
-                sorted++;
-        }
-
-        if (nxt == n)
-        {
-            next[left] = n;
-        }
-        else
-        {
-            prev[nxt] = left;
-            next[left] = nxt;
-            pq.emplace(arr[left] + arr[nxt], left);
-            if (arr[left] <= arr[nxt])
-                sorted++;
-        }
-
-        if (sorted == rem - 1)
-            return n - rem;
     }
-    return n;
+    vector<bool> isvisited(n, false);
+    isvisited[0] = true;
+    return helper(g, 0, n, isvisited);
 }
 
 int main()
 {
-    vector<int> nums = {5, 2, 3, 1};
-    cout << minimumPairRemoval(nums);
+    vector<vector<int>> edges = {{2, 0, 12}, {1, 0, 5}, {0, 1, 15}};
+    int n = 3;
+    cout << minCost(n, edges);
     return 0;
 }
