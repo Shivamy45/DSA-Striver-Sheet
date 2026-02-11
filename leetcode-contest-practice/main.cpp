@@ -4,50 +4,47 @@
 #include <utility>
 #include <queue>
 using namespace std;
-
-int helper(vector<vector<pair<int, int>>> &g, int node, int n, vector<bool> &isvisited)
+long long countSubarrays(vector<int> &nums, long long k)
 {
-    if (node == n - 1)
-        return 0;
-    int minCost = INT_MAX;
-    for (auto &x : g[node])
+    int n = nums.size();
+    deque<int> minE;
+    deque<int> maxE;
+    long long cnt = 0;
+    int l = 0, r = 0;
+    while(r < n)
     {
-        if (!isvisited[x.first])
+        while (!minE.empty() && nums[r] <= nums[minE.back()])
         {
-            isvisited[x.first] = true;
-            if (helper(g, x.first, n, isvisited) != -1)
-                minCost = min(minCost, x.second + helper(g, x.first, n, isvisited));
-            isvisited[x.first] = false;
+            minE.pop_back();
         }
-    }
-    return (minCost == INT_MAX) ? -1 : minCost;
-}
+        minE.push_back(r);
+        while (!maxE.empty() && nums[r] >= nums[maxE.back()])
+        {
+            maxE.pop_back();
+        }
+        maxE.push_back(r);
 
-int minCost(int n, vector<vector<int>> &edges)
-{
-    vector<vector<pair<int, int>>> g(n);
-    for (auto &it : edges)
-    {
-        g[it[0]].push_back(make_pair(it[1], it[2]));
-        g[it[1]].push_back(make_pair(it[0], it[2] * 2));
-    }
-    for (int i = 0; i < n; i++)
-    {
-        cout << i << ":" << endl;
-        for (auto &x : g[i])
-        {
-            cout << x.first << ", " << x.second << endl;
+        long long cost = (nums[maxE.front()] - nums[minE.front()]) * (r - l + 1);
+        while(cost > k){
+            l++;
+            if (l > maxE.front())
+                maxE.pop_front();
+            if (l > minE.front())
+                minE.pop_front();
+            cost = (nums[maxE.front()] - nums[minE.front()]) * (r - l + 1);
         }
+        // cout << cost << endl;
+        if (cost <= k)
+            cnt += (r - l + 1);
+        r++;
     }
-    vector<bool> isvisited(n, false);
-    isvisited[0] = true;
-    return helper(g, 0, n, isvisited);
+    return cnt;
 }
 
 int main()
 {
-    vector<vector<int>> edges = {{2, 0, 12}, {1, 0, 5}, {0, 1, 15}};
-    int n = 3;
-    cout << minCost(n, edges);
+    vector<int> nums = {1, 3, 2};
+    int k = 4;
+    cout << countSubarrays(nums, k);
     return 0;
 }
