@@ -4,47 +4,44 @@
 #include <utility>
 #include <queue>
 using namespace std;
-long long countSubarrays(vector<int> &nums, long long k)
-{
-    int n = nums.size();
-    deque<int> minE;
-    deque<int> maxE;
-    long long cnt = 0;
-    int l = 0, r = 0;
-    while(r < n)
-    {
-        while (!minE.empty() && nums[r] <= nums[minE.back()])
-        {
-            minE.pop_back();
-        }
-        minE.push_back(r);
-        while (!maxE.empty() && nums[r] >= nums[maxE.back()])
-        {
-            maxE.pop_back();
-        }
-        maxE.push_back(r);
 
-        long long cost = (nums[maxE.front()] - nums[minE.front()]) * (r - l + 1);
-        while(cost > k){
-            l++;
-            if (l > maxE.front())
-                maxE.pop_front();
-            if (l > minE.front())
-                minE.pop_front();
-            cost = (nums[maxE.front()] - nums[minE.front()]) * (r - l + 1);
-        }
-        // cout << cost << endl;
-        if (cost <= k)
-            cnt += (r - l + 1);
-        r++;
-    }
+long long gcd(long long a, long long b)
+{
+    return b == 0 ? a : gcd(b, a % b);
+}
+
+int helper(map<
+               pair<int, pair<long long, long long>>,
+               long long>
+               &memo,
+           vector<int> &nums, long long k, int i, long long num, long long den)
+{
+    int g = gcd(num, den);
+    num /= g;
+    den /= g;
+    if (i == nums.size())
+        return (num % den == 0) && ((num / den) == k);
+    auto key = make_pair(i, make_pair(num, den));
+    if (memo.count(key))
+        return memo[key];
+    int cnt = 0;
+    cnt += helper(memo, nums, k, i + 1, num, den);
+    cnt += helper(memo, nums, k, i + 1, num * nums[i], den);
+    cnt += helper(memo, nums, k, i + 1, num, den * nums[i]);
+    memo[key] = cnt;
     return cnt;
+}
+
+int countSequences(vector<int> &nums, long long k)
+{
+    map<
+        pair<int, pair<long long, long long>>,
+        long long>
+        memo;
+    return helper(memo, nums, k, 0, 1, 1);
 }
 
 int main()
 {
-    vector<int> nums = {1, 3, 2};
-    int k = 4;
-    cout << countSubarrays(nums, k);
     return 0;
 }
