@@ -1,4 +1,5 @@
 #include <iostream>
+#include <set>
 using namespace std;
 
 bool helperIsSubsetSum(int idx, vector<int> &arr, int target, vector<vector<int>> &dp)
@@ -263,10 +264,83 @@ int minSubsetSumDifference3(vector<int> &nums)
     return ans;
 }
 
+void generate(int ind, int count, int currSum, int end, vector<int> &nums, vector<vector<int>> &sums)
+{
+    if (ind > end)
+    {
+        sums[count].push_back(currSum);
+        return;
+    }
+    generate(ind + 1, count, currSum, end, nums, sums);
+    generate(ind + 1, count + 1, currSum + nums[ind], end, nums, sums);
+}
+
+vector<vector<int>> calculateAllSubsetSum(vector<int> &nums, int start, int end)
+{
+    int n = end - start + 1;
+    vector<vector<int>> sums(n + 1);
+    generate(start, 0, 0, end, nums, sums);
+    return sums;
+}
+
+// Not DP this is Meet-In-Middle
 int minimumDifference(vector<int> &nums)
 {
     int n = nums.size();
-    
+    int totalSum = 0;
+    for (int &a : nums)
+        totalSum += a;
+    int m = n / 2;
+    vector<vector<int>> left(m + 1), right(m + 1);
+    left = calculateAllSubsetSum(nums, 0, m - 1);
+    right = calculateAllSubsetSum(nums, m, n - 1);
+    for (int k = 0; k <= m; k++)
+        sort(right[k].begin(), right[k].end());
+    int ans = 1e9;
+    for (int k = 0; k <= m; k++)
+    {
+        for (int sumL : left[k])
+        {
+            int target = totalSum / 2 - sumL;
+            auto &vec = right[m - k];
+            auto it = lower_bound(vec.begin(), vec.end(), target);
+            if (it != vec.end())
+            {
+                int chosen = sumL + *it;
+                ans = min(ans, abs(totalSum - 2 * chosen));
+            }
+            if (it != vec.begin())
+            {
+                --it;
+                int chosen = sumL + *it;
+                ans = min(ans, abs(totalSum - 2 * chosen));
+            }
+        }
+    }
+    return ans;
+}
+
+int helperFindContentChildren(int i, int j, int cnt, vector<int> &greed, vector<int> &cookie, vector<vector<int>> &dp)
+{
+    if (i == greed.size() || j == cookie.size())
+        return cnt;
+    if (dp[i][j] != -1)
+        return dp[i][j];
+    int notTake = helperFindContentChildren(i, j + 1, cnt, greed, cookie, dp);
+    // take
+    int take = 0;
+    if (greed[i] <= cookie[i])
+        take = helperFindContentChildren(i + 1, j + 1, cnt + 1, greed, cookie, dp);
+    return dp[i][j] = max(notTake, take);
+}
+
+int findContentChildren(vector<int> &greed, vector<int> &cookie)
+{
+    sort(greed.begin(), greed.end());
+    sort(cookie.begin(), cookie.end());
+    int n = greed.size(), m = cookie.size();
+    vector<vector<int>> dp(n, vector<int>(m, -1));
+    return helperFindContentChildren(0, 0, 0, greed, cookie, dp);
 }
 
 int main()
@@ -301,6 +375,25 @@ int main()
     cout << minSubsetSumDifference2(arr) << endl;
     cout << "--------------" << endl;
     cout << minSubsetSumDifference3(arr) << endl;
+    cout << "--------------" << endl;
+
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    cout << minimumDifference(arr) << endl;
+    cout << "--------------" << endl;
+
+    cin >> n;
+    arr.resize(n);
+    for (int &a : arr)
+        cin >> a;
+    int m;
+    cin >> m;
+    vector<int> arr2(m);
+    for (int &a : arr2)
+        cin >> a;
+    cout << findContentChildren(arr, arr2) << endl;
     cout << "--------------" << endl;
 
     return 0;
