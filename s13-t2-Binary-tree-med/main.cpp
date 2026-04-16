@@ -1,4 +1,6 @@
 #include <iostream>
+#include <map>
+#include <set>
 using namespace std;
 
 struct TreeNode
@@ -109,25 +111,228 @@ bool isSameTree(TreeNode *p, TreeNode *q)
     return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
 }
 
-void helperZigzagLevelOrder(TreeNode *root, int lvl, vector<vector<int>> &res)
-{
-    if (res.size() >= lvl)
-    {
-        res[lvl].push_back(root->val);
-    }
-    else
-    {
-        res.push_back({root->val});
-    }
-    if(lvl % 2 == 0){
-
-    }
-}
 vector<vector<int>> zigzagLevelOrder(TreeNode *root)
 {
     vector<vector<int>> res;
-    helperZigzagLevelOrder(root, 1, res);
+    queue<TreeNode *> q;
+    q.push(root);
+    bool leftToRight = true;
+    while (!q.empty())
+    {
+        int size = q.size();
+        vector<int> temp(size);
+        for (int i = 0; i < size; i++)
+        {
+            TreeNode *node = q.front();
+            q.pop();
+            int idx = (leftToRight) ? i : size - i - 1;
+            temp[idx] = node->val;
+            if (node->left)
+                q.push(node->left);
+            if (node->right)
+                q.push(node->right);
+        }
+        res.push_back(temp);
+        leftToRight = !leftToRight;
+    }
     return res;
+}
+
+bool isLeaf(TreeNode *root)
+{
+    return !root->left && !root->right;
+}
+void leftTraversal(TreeNode *root, vector<int> &res)
+{
+    TreeNode *curr = root->left;
+    while (curr)
+    {
+        if (!(isLeaf(curr)))
+            res.push_back(curr->val);
+        if (curr->left)
+            curr = curr->left;
+        else
+            curr = curr->right;
+    }
+}
+void leafTraversal(TreeNode *root, vector<int> &res)
+{
+    if (!root)
+        return;
+    if (isLeaf(root))
+        res.push_back(root->val);
+    leafTraversal(root->left, res);
+    leafTraversal(root->right, res);
+}
+void rightTraversal(TreeNode *root, vector<int> &res)
+{
+    if (!root)
+        return;
+    if (isLeaf(root))
+        return;
+    if (root->right)
+        rightTraversal(root->right, res);
+    else
+        rightTraversal(root->left, res);
+    res.push_back(root->val);
+}
+
+vector<int> boundaryTraversal(TreeNode *root)
+{
+    vector<int> res;
+    if (!root)
+        return res;
+    if (!isLeaf(root))
+        res.push_back(root->val);
+    leftTraversal(root, res);
+    leafTraversal(root, res);
+    rightTraversal(root->right, res);
+    return res;
+}
+
+vector<vector<int>> verticalTraversal(TreeNode *root)
+{
+    map<int, map<int, multiset<int>>> mpp;
+    queue<tuple<TreeNode *, int, int>> q;
+    // {node, {col, lvl}}
+    q.push({root, 0, 0});
+    while (!q.empty())
+    {
+        auto [node, col, lvl] = q.front();
+        q.pop();
+        mpp[col][lvl].insert(node->val);
+        if (node->left)
+            q.push({node->left, col - 1, lvl + 1});
+        if (node->right)
+            q.push({node->right, col + 1, lvl + 1});
+    }
+    vector<vector<int>> res;
+    for (auto &col : mpp)
+    {
+        vector<int> temp;
+        for (auto &lvl : col.second)
+        {
+            for (auto val : lvl.second)
+            {
+                temp.push_back(val);
+            }
+        }
+        res.push_back(temp);
+    }
+    return res;
+}
+
+vector<int> topView(TreeNode *root)
+{
+    vector<int> res;
+    if (!root)
+        return res;
+    map<int, int> mpp;
+    queue<pair<TreeNode *, int>> q;
+    q.push({root, 0});
+    while (!q.empty())
+    {
+        auto [node, col] = q.front();
+        q.pop();
+        if (node->left)
+            q.push({node->left, col - 1});
+        if (node->right)
+            q.push({node->right, col + 1});
+        if (mpp.count(col) == 0)
+            mpp[col] = node->val;
+    }
+    for (auto it : mpp)
+        res.push_back(it.second);
+    return res;
+}
+
+vector<int> bottomView(TreeNode *root)
+{
+    vector<int> res;
+    if (!root)
+        return res;
+    map<int, int> mpp;
+    queue<pair<TreeNode *, int>> q;
+    q.push({root, 0});
+    while (!q.empty())
+    {
+        auto [node, col] = q.front();
+        q.pop();
+        mpp[col] = node->val;
+        if (node->left)
+            q.push({node->left, col - 1});
+        if (node->right)
+            q.push({node->right, col + 1});
+    }
+
+    for (auto it : mpp)
+        res.push_back(it.second);
+    return res;
+}
+
+// on GFG
+vector<int> leftView(TreeNode *root)
+{
+    vector<int> res;
+    if (!root)
+        return res;
+    map<int, int> mpp;
+    queue<pair<TreeNode *, int>> q;
+    q.push({root, 0});
+    while (!q.empty())
+    {
+        auto [node, y] = q.front();
+        q.pop();
+        if (mpp.find(y) == mpp.end())
+            mpp[y] = node->val;
+        if (node->left)
+            q.push({node->left, y + 1});
+        if (node->right)
+            q.push({node->right, y + 1});
+    }
+    for (auto it : mpp)
+        res.push_back(it.second);
+    return res;
+}
+
+vector<int> rightSideView(TreeNode *root)
+{
+    vector<int> res;
+    if (!root)
+        return res;
+    map<int, int> mpp;
+    queue<pair<TreeNode *, int>> q;
+    q.push({root, 0});
+    while (!q.empty())
+    {
+        auto [node, y] = q.front();
+        q.pop();
+        mpp[y] = node->val;
+        if (node->left)
+            q.push({node->left, y + 1});
+        if (node->right)
+            q.push({node->right, y + 1});
+    }
+    for (auto it : mpp)
+        res.push_back(it.second);
+    return res;
+}
+
+bool helperIsSymmetric(TreeNode *p, TreeNode *q)
+{
+    if (p == NULL && q == NULL)
+        return true;
+    if (p == NULL || q == NULL)
+        return false;
+    if (p->val != q->val)
+        return false;
+    return helperIsSymmetric(p->left, q->right) && helperIsSymmetric(p->right, q->left);
+}
+bool isSymmetric(TreeNode *root)
+{
+    if (!root)
+        return true;
+    return helperIsSymmetric(root->left, root->right);
 }
 
 int main()
@@ -179,6 +384,68 @@ int main()
             cout << a << " ";
         cout << endl;
     }
+    cout << "-------------------" << endl;
+
+    cin >> n;
+    arr.resize(n);
+    for (string &a : arr)
+        cin >> a;
+    root = createTree(arr);
+    vector<int> ans2 = boundaryTraversal(root);
+    for (int a : ans2)
+        cout << a << " ";
+    cout << endl;
+    cout << "-------------------" << endl;
+
+    cin >> n;
+    arr.resize(n);
+    for (string &a : arr)
+        cin >> a;
+    root = createTree(arr);
+    ans = verticalTraversal(root);
+    for (auto it : ans)
+    {
+        for (int a : it)
+            cout << a << " ";
+        cout << endl;
+    }
+    cout << "-------------------" << endl;
+    
+    cin >> n;
+    arr.resize(n);
+    for (string &a : arr)
+        cin >> a;
+    root = createTree(arr);
+    ans2 = topView(root);
+    for (int a : ans2)
+        cout << a << " ";
+    cout << endl;
+    cout << "-------------------" << endl;
+
+    ans2 = bottomView(root);
+    for (int a : ans2)
+        cout << a << " ";
+    cout << endl;
+    cout << "-------------------" << endl;
+
+    ans2 = leftView(root);
+    for (int a : ans2)
+        cout << a << " ";
+    cout << endl;
+    cout << "-------------------" << endl;
+
+    ans2 = rightSideView(root);
+    for (int a : ans2)
+        cout << a << " ";
+    cout << endl;
+    cout << "-------------------" << endl;
+
+    cin >> n;
+    arr.resize(n);
+    for (string &a : arr)
+        cin >> a;
+    root = createTree(arr);
+    cout << isSymmetric(root) << endl;
     cout << "-------------------" << endl;
 
     return 0;
