@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unordered_set>
+#include <sstream>
 using namespace std;
 
 struct TreeNode
@@ -22,12 +23,12 @@ void bfs(TreeNode *root)
         for (int i = 0; i < size; i++)
         {
             TreeNode *temp = q.front();
+            q.pop();
             cout << temp->val << " ";
             if (temp->left)
                 q.push(temp->left);
             if (temp->right)
                 q.push(temp->right);
-            q.pop();
         }
         cout << endl;
     }
@@ -337,6 +338,177 @@ int countNodes(TreeNode *root)
     return 1 + countNodes(root->left) + countNodes(root->right);
 }
 
+int preOrderIndex = 0;
+TreeNode *helperBuildTree(vector<int> &preorder, int l, int r, unordered_map<int, int> &mpp)
+{
+    if (l > r)
+        return nullptr;
+    int nodeVal = preorder[preOrderIndex++];
+    TreeNode *head = new TreeNode(nodeVal);
+    int idx = mpp[nodeVal];
+    head->left = helperBuildTree(preorder, l, idx - 1, mpp);
+    head->right = helperBuildTree(preorder, idx + 1, r, mpp);
+    return head;
+}
+
+TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder)
+{
+    int n = inorder.size();
+    unordered_map<int, int> mpp;
+    for (int i = 0; i < n; i++)
+        mpp[inorder[i]] = i;
+    return helperBuildTree(preorder, 0, n - 1, mpp);
+}
+
+TreeNode *helperBuildTree2(vector<int> &postorder, int &idx, int l, int r, unordered_map<int, int> &mpp)
+{
+    if (l > r)
+        return nullptr;
+    int nodeVal = postorder[idx--];
+    TreeNode *head = new TreeNode(nodeVal);
+    int inorderIdx = mpp[nodeVal];
+    head->right = helperBuildTree2(postorder, idx, inorderIdx + 1, r, mpp);
+    head->left = helperBuildTree2(postorder, idx, l, inorderIdx - 1, mpp);
+    return head;
+}
+
+TreeNode *buildTree2(vector<int> &inorder, vector<int> &postorder)
+{
+    int n = inorder.size();
+    unordered_map<int, int> mpp;
+    for (int i = 0; i < n; i++)
+        mpp[inorder[i]] = i;
+    int idx = n - 1;
+    return helperBuildTree2(postorder, idx, 0, n - 1, mpp);
+}
+
+// Encodes a tree to a single string.
+string serialize(TreeNode *root)
+{
+    string res;
+    queue<TreeNode *> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        TreeNode *node = q.front();
+        q.pop();
+        if (!node)
+            res += '#';
+        else
+        {
+            res += to_string(node->val);
+            q.push(node->left);
+            q.push(node->right);
+        }
+        res += ',';
+    }
+    return res;
+}
+
+// Decodes your encoded data to tree.
+TreeNode *deserialize(string data)
+{
+    if (data.size() == 0)
+        return nullptr;
+    stringstream ss(data);
+    string val;
+    getline(ss, val, ',');
+    if (val == "#")
+        return nullptr;
+    TreeNode *root = new TreeNode(stoi(val));
+    queue<TreeNode *> q;
+    q.push(root);
+    while (!q.empty())
+    {
+        TreeNode *node = q.front();
+        q.pop();
+        if (!getline(ss, val, ','))
+            break;
+        if (val != "#")
+        {
+            node->left = new TreeNode(stoi(val));
+            q.push(node->left);
+        }
+        if (!getline(ss, val, ','))
+            break;
+        if (val != "#")
+        {
+            node->right = new TreeNode(stoi(val));
+            q.push(node->right);
+        }
+    }
+    return root;
+}
+
+vector<int> preorderTraversal(TreeNode *root)
+{
+    vector<int> res;
+    TreeNode *curr = root;
+    while (curr != NULL)
+    {
+        if (!curr->left)
+        {
+            res.push_back(curr->val);
+            curr = curr->right;
+        }
+        else
+        {
+            TreeNode *prev = curr->left;
+            while (prev->right && prev->right != curr)
+            {
+                prev = prev->right;
+            }
+            if (!prev->right)
+            {
+                res.push_back(curr->val);
+                prev->right = curr;
+                curr = curr->left;
+            }
+            else
+            {
+                prev->right = nullptr;
+                curr = curr->right;
+            }
+        }
+    }
+    return res;
+}
+
+vector<int> inorderTraversal(TreeNode *root)
+{
+    vector<int> res;
+    TreeNode *curr = root;
+    while (curr != nullptr)
+    {
+        if (!curr->left)
+        {
+            res.push_back(curr->val);
+            curr = curr->right;
+        }
+        else
+        {
+            TreeNode *prev = curr->left;
+            while (prev->right && prev->right != curr)
+            {
+                prev = prev->right;
+            }
+            if (!prev->right)
+            {
+                prev->right = curr;
+                curr = curr->left;
+            }
+            else
+            {
+                prev->right = nullptr;
+                res.push_back(curr->val);
+                curr = curr->right;
+            }
+        }
+    }
+
+    return res;
+}
+
 
 
 int main()
@@ -419,6 +591,57 @@ int main()
         cin >> a;
     root = createTree(arr);
     cout << countNodes(root) << endl;
+    cout << "-----------------" << endl;
+
+    cin >> n;
+    vector<int> arr1(n);
+    for (int &a : arr1)
+        cin >> a;
+    vector<int> arr2(n);
+    for (int &a : arr2)
+        cin >> a;
+    root = buildTree(arr1, arr2);
+    bfs(root);
+    cout << "-----------------" << endl;
+
+    cin >> n;
+    arr1.resize(n);
+    for (int &a : arr1)
+        cin >> a;
+    arr2.resize(n);
+    for (int &a : arr2)
+        cin >> a;
+    root = buildTree2(arr1, arr2);
+    bfs(root);
+    cout << "-----------------" << endl;
+
+    cin >> n;
+    arr.resize(n);
+    for (string &a : arr)
+        cin >> a;
+    root = createTree(arr);
+    string hashTree = serialize(root);
+    cout << hashTree << endl;
+    cout << "-----------------" << endl;
+    root = deserialize(hashTree);
+    bfs(root);
+    cout << "-----------------" << endl;
+
+    cin >> n;
+    arr.resize(n);
+    for (string &a : arr)
+        cin >> a;
+    root = createTree(arr);
+    res = preorderTraversal(root);
+    for (int &a : res)
+        cout << a << " ";
+    cout << endl;
+    cout << "-----------------" << endl;
+
+    res = inorderTraversal(root);
+    for (int &a : res)
+        cout << a << " ";
+    cout << endl;
     cout << "-----------------" << endl;
 
     return 0;

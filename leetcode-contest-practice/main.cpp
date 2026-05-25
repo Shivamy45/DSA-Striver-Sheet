@@ -5,43 +5,46 @@
 #include <queue>
 using namespace std;
 
-long long gcd(long long a, long long b)
+int power(int n, int k, int limit)
 {
-    return b == 0 ? a : gcd(b, a % b);
+    int res = 1;
+    for (int i = 0; i < k; i++)
+    {
+        if (res > limit / n)
+            return limit + 1;
+        res *= n;
+    }
+    return res;
 }
-
-int helper(map<
-               pair<int, pair<long long, long long>>,
-               long long>
-               &memo,
-           vector<int> &nums, long long k, int i, long long num, long long den)
+int perfectPower(int n, int k)
 {
-    int g = gcd(num, den);
-    num /= g;
-    den /= g;
-    if (i == nums.size())
-        return (num % den == 0) && ((num / den) == k);
-    auto key = make_pair(i, make_pair(num, den));
-    if (memo.count(key))
-        return memo[key];
-    int cnt = 0;
-    cnt += helper(memo, nums, k, i + 1, num, den);
-    cnt += helper(memo, nums, k, i + 1, num * nums[i], den);
-    cnt += helper(memo, nums, k, i + 1, num, den * nums[i]);
-    memo[key] = cnt;
-    return cnt;
+    int l = 1, r = n, ans = 0;
+    while (l <= r)
+    {
+        int mid = (l + r) / 2;
+        if (power(mid, k, n) <= n)
+        {
+            ans = mid;
+            l = mid + 1;
+        }
+        else
+        {
+            r = mid - 1;
+        }
+    }
+    return ans;
 }
-
-int countSequences(vector<int> &nums, long long k)
+int countKthRoots(int l, int r, int k)
 {
-    map<
-        pair<int, pair<long long, long long>>,
-        long long>
-        memo;
-    return helper(memo, nums, k, 0, 1, 1);
+    long long left = perfectPower(l - 1, k);
+    long long right = perfectPower(r, k);
+    return right - left + 1;
 }
 
 int main()
 {
+    int l, r, k;
+    cin >> l >> r >> k;
+    cout << countKthRoots(l, r, k);
     return 0;
 }
