@@ -509,7 +509,24 @@ vector<int> inorderTraversal(TreeNode *root)
     return res;
 }
 
-
+void flatten(TreeNode *root)
+{
+    while (root != nullptr)
+    {
+        if (root->left)
+        {
+            TreeNode *pred = root->left;
+            while (pred->right)
+            {
+                pred = pred->right;
+            }
+            pred->right = root->right;
+            root->right = root->left;
+            root->left = nullptr;
+        }
+        root = root->right;
+    }
+}
 
 int main()
 {
@@ -638,6 +655,22 @@ int main()
     cout << endl;
     cout << "-----------------" << endl;
 
+    res = inorderTraversal(root);
+    for (int &a : res)
+        cout << a << " ";
+    cout << endl;
+    cout << "-----------------" << endl;
+
+    cin >> n;
+    arr.resize(n);
+    for (string &a : arr)
+        cin >> a;
+    root = createTree(arr);
+    res = preorderTraversal(root);
+    for (int &a : res)
+        cout << a << " ";
+    cout << endl;
+    flatten(root);
     res = inorderTraversal(root);
     for (int &a : res)
         cout << a << " ";
