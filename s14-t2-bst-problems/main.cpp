@@ -196,9 +196,85 @@ TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q)
     return root;
 }
 
+TreeNode *helper(vector<int> &preorder, int &idx, int bound)
+{
+    if (idx == preorder.size() || preorder[idx] > bound)
+        return nullptr;
+    TreeNode *root = new TreeNode(preorder[idx++]);
+    root->left = helper(preorder, idx, root->val);
+    root->right = helper(preorder, idx, bound);
+    return root;
+}
+
 TreeNode *bstFromPreorder(vector<int> &preorder)
 {
-    
+    int idx = 0, n = preorder.size();
+    return helper(preorder, idx, INT_MAX);
+}
+
+int inOrderSuccessor(TreeNode *root, int k)
+{
+    TreeNode *temp = root;
+    int ans = -1;
+    while (temp)
+    {
+        if (temp->val <= k)
+            temp = temp->right;
+        else if (temp->val > k)
+        {
+            ans = temp->val;
+            temp = temp->left;
+        }
+    }
+    return ans;
+}
+
+bool search(TreeNode *root, TreeNode *curr, int key)
+{
+    if (!root)
+        return false;
+    if (root->val == key && root != curr)
+        return true;
+    else if (root->val < key)
+        return search(root->right, curr, key);
+    else if (root->val > key)
+        return search(root->left, curr, key);
+    return false;
+}
+bool traverse(TreeNode *root, TreeNode *curr, int k)
+{
+    if (!curr)
+        return false;
+    int key = k - curr->val;
+    if (search(root, curr, key))
+        return true;
+    return traverse(root, curr->left, k) || traverse(root, curr->right, k);
+}
+bool findTarget(TreeNode *root, int k)
+{
+    return traverse(root, root, k);
+}
+
+void inorder(TreeNode *root, TreeNode *&first, TreeNode *&second, TreeNode *&prev)
+{
+    if (!root)
+        return;
+    inorder(root->left, first, second, prev);
+    if (prev && prev->val >= root->val)
+    {
+        if (!first)
+            first = prev;
+        second = root;
+    }
+    prev = root;
+    inorder(root->right, first, second, prev);
+}
+
+void recoverTree(TreeNode *root)
+{
+    TreeNode *first = nullptr, *second = nullptr, *prev = nullptr;
+    inorder(root, first, second, prev);
+    swap(first->val, second->val);
 }
 
 int main()
@@ -246,6 +322,40 @@ int main()
     cout << "-----------------" << endl;
 
     cout << lowestCommonAncestor(root, root->left, root->right)->val << endl;
+    cout << "-----------------" << endl;
+
+    cin >> n;
+    vector<int> arr2(n);
+    for (int &a : arr2)
+        cin >> a;
+    root = bstFromPreorder(arr2);
+    inorderTraversal(root);
+    cout << endl;
+    cout << "-----------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (string &a : arr)
+        cin >> a;
+    root = buildBST(arr);
+    cin >> k;
+    cout << inOrderSuccessor(root, k) << endl;
+    cout << "-----------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (string &a : arr)
+        cin >> a;
+    root = buildBST(arr);
+    cin >> k;
+    cout << findTarget(root, k) << endl;
+    cout << "-----------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (string &a : arr)
+        cin >> a;
+    root = buildBST(arr);
+    recoverTree(root);
+    inorderTraversal(root);
+    cout << endl;
     cout << "-----------------" << endl;
 
     return 0;
