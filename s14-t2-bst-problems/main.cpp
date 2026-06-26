@@ -254,27 +254,68 @@ bool findTarget(TreeNode *root, int k)
 {
     return traverse(root, root, k);
 }
-
-void inorder(TreeNode *root, TreeNode *&first, TreeNode *&second, TreeNode *&prev)
+TreeNode *first = nullptr, *second = nullptr, *previous = nullptr;
+void inorder(TreeNode *root)
 {
     if (!root)
         return;
-    inorder(root->left, first, second, prev);
-    if (prev && prev->val >= root->val)
+    inorder(root->left);
+    if (previous && previous->val >= root->val)
     {
         if (!first)
-            first = prev;
+            first = previous;
         second = root;
     }
-    prev = root;
-    inorder(root->right, first, second, prev);
+    previous = root;
+    inorder(root->right);
 }
 
 void recoverTree(TreeNode *root)
 {
-    TreeNode *first = nullptr, *second = nullptr, *prev = nullptr;
-    inorder(root, first, second, prev);
+    inorder(root);
     swap(first->val, second->val);
+}
+
+struct Data
+{
+    int subtreeSum;
+    int mx;
+    int mn;
+    bool isBST;
+    Data()
+    {
+        subtreeSum = 0;
+        mx = INT_MIN;
+        mn = INT_MAX;
+        isBST = true;
+    }
+};
+
+Data *validBST(TreeNode *root, int &ans)
+{
+    // empty node
+    if (!root)
+        return new Data();
+    auto left = validBST(root->left, ans);
+    auto right = validBST(root->right, ans);
+    Data *temp = new Data();
+    if (left->isBST && right->isBST && left->mx < root->val && root->val < right->mn)
+    {
+        temp->subtreeSum = left->subtreeSum + right->subtreeSum + root->val;
+        ans = max(ans, temp->subtreeSum);
+        temp->mx = max(root->val, right->mx);
+        temp->mn = min(root->val, left->mn);
+        return temp;
+    }
+    temp->isBST = false;
+    return temp;
+}
+
+int maxSumBST(TreeNode *root)
+{
+    int ans = 0;
+    validBST(root, ans);
+    return ans;
 }
 
 int main()
@@ -356,6 +397,13 @@ int main()
     recoverTree(root);
     inorderTraversal(root);
     cout << endl;
+    cout << "-----------------" << endl;
+    cin >> n;
+    arr.resize(n);
+    for (string &a : arr)
+        cin >> a;
+    root = buildBST(arr);
+    cout << maxSumBST(root) << endl;
     cout << "-----------------" << endl;
 
     return 0;

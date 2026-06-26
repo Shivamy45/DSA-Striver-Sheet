@@ -1,22 +1,23 @@
 {
-    "github.copilot.enable": {
-        "*": false,
-        "plaintext": false,
-        "markdown": false,
-        "scminput": false
-    },
-    "files.associations": {
-        "iostream": "cpp",
-        "__tree": "cpp",
-        "bitset": "cpp",
-        "set": "cpp",
-        "vector": "cpp",
-        "unordered_map": "cpp",
-        "complex": "cpp",
-        "string": "cpp",
-        "new": "cpp",
-        "stack": "cpp",
-        "__config": "cpp",
-        "unordered_set": "cpp"
-    }
+	"github.copilot.enable": {
+		"*": false,
+		"plaintext": false,
+		"markdown": false,
+		"scminput": false,
+		"cpp": false
+	},
+	"files.associations": {
+		"iostream": "cpp",
+		"__tree": "cpp",
+		"bitset": "cpp",
+		"set": "cpp",
+		"vector": "cpp",
+		"unordered_map": "cpp",
+		"complex": "cpp",
+		"string": "cpp",
+		"new": "cpp",
+		"stack": "cpp",
+		"__config": "cpp",
+		"unordered_set": "cpp"
+	}
 }
