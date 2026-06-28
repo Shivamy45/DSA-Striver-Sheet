@@ -2,7 +2,7 @@
 	"github.copilot.enable": {
 		"*": false,
 		"plaintext": false,
-		"markdown": false,
+		"markdown": true,
 		"scminput": false,
 		"cpp": false
 	},
@@ -19,5 +19,6 @@
 		"stack": "cpp",
 		"__config": "cpp",
 		"unordered_set": "cpp"
-	}
+	},
+	"json.schemas": []
 }
