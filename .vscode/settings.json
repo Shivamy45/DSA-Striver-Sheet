@@ -20,5 +20,16 @@
 		"__config": "cpp",
 		"unordered_set": "cpp"
 	},
-	"json.schemas": []
+	"json.schemas": [],
+	"[cpp]": {
+		"editor.defaultFormatter": "ms-vscode.cpptools",
+
+		"editor.formatOnSave": true,
+
+		"editor.tabSize": 4,
+
+		"editor.insertSpaces": true
+	},
+
+	"C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, TabWidth: 4, UseTab: Never, BreakBeforeBraces: Attach }"
 }

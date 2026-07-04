@@ -82,23 +82,31 @@ bool lemonadeChange(vector<int> &bills)
 
 bool checkValidString(string s)
 {
-    int star = 0;
-    stack<char> st;
+    int mn = 0, mx = 0, cnt = 0;
     for (char c : s)
     {
-        if (c == '(')
-            st.push(c);
-        else if (c == ')')
+        if (c == ')')
         {
-            if (!st.empty())
-                st.pop();
-            else if (--star < 0)
-                return false;
+            mn--;
+            mx--;
+        }
+        else if (c == '(')
+        {
+            mn++;
+            mx++;
         }
         else
-            star++;
+        {
+            mn--;
+            mx++;
+        }
+        if(mn < 0)
+            mn = 0;
+        if(mx < 0)
+            return false;
     }
-    return true;
+
+    return mn == 0;
 }
 
 int main()
@@ -118,8 +126,7 @@ int main()
     arr.resize(n);
     for (int &a : arr)
         cin >> a;
-    cin >> m;
-    arr2.resize(m);
+    arr2.resize(n);
     for (int &a : arr2)
         cin >> a;
     int c;
@@ -133,9 +140,8 @@ int main()
     cout << lemonadeChange(arr) << endl;
     cout << "--------------" << endl;
     string s;
-    getline(cin, s);
+    cin >> s;
     cout << checkValidString(s) << endl;
-    
     cout << "--------------" << endl;
 
     return 0;
