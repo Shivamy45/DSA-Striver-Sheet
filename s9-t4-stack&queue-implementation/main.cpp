@@ -1,38 +1,28 @@
-#include <iostream>
 #include <deque>
+#include <iostream>
 using namespace std;
 
-vector<int> maxSlidingWindow(vector<int> &nums, int k)
-{
+vector<int> maxSlidingWindow(vector<int>& nums, int k) {
     int n = nums.size();
     vector<int> res(n - k + 1);
     deque<int> dq;
-    for (int i = 0; i < n; i++)
-    {
-        if (!dq.empty() && dq.front() <= i - k)
-            dq.pop_front();
-        while (!dq.empty() && nums[dq.back()] <= nums[i])
-            dq.pop_back();
+    for (int i = 0; i < n; i++) {
+        if (!dq.empty() && dq.front() <= i - k) dq.pop_front();
+        while (!dq.empty() && nums[dq.back()] <= nums[i]) dq.pop_back();
         dq.push_back(i);
-        if (i >= k - 1)
-            res[i - k + 1] = nums[dq.front()];
+        if (i >= k - 1) res[i - k + 1] = nums[dq.front()];
     }
     return res;
 }
 
-class StockSpanner
-{
-public:
+class StockSpanner {
+   public:
     stack<pair<int, int>> st;
     int idx = 1;
-    StockSpanner()
-    {
-    }
+    StockSpanner() {}
 
-    int next(int price)
-    {
-        while (!st.empty() && st.top().first <= price)
-        {
+    int next(int price) {
+        while (!st.empty() && st.top().first <= price) {
             st.pop();
         }
         st.push({price, idx});
@@ -46,38 +36,68 @@ public:
  * int param_1 = obj->next(price);
  */
 
-struct Node
-{
+// Using stack or queue - O(n) time - O(n) space
+int celebrity(vector<vector<int>>& mat) {
+    int n = mat.size();
+
+    stack<int> people;
+    for (int i = 0; i < n; i++) people.push(i);
+    while (people.size() > 1) {
+        int first = people.top();
+        people.pop();
+        int second = people.top();
+        people.pop();
+        if (mat[first][second] == 1)
+            people.push(second);
+        else
+            people.push(first);
+    }
+    int celeb = people.top();
+    for (int i = 0; i < n; i++) {
+        if (i != celeb && (mat[i][celeb] == 0 || mat[celeb][i] == 1)) return -1;
+    }
+    return celeb;
+}
+// Using pointer - O(n) time - O(1) space
+int celebrity2(vector<vector<int>>& mat) {
+    int n = mat.size();
+    int celeb = 0;
+    for (int i = 1; i < n; i++) {
+        if (mat[celeb][i] == 1) celeb = i;
+    }
+
+    for (int i = 0; i < n; i++) {
+        if (i != celeb && (mat[i][celeb] == 0 || mat[celeb][i] == 1)) return -1;
+    }
+    return celeb;
+}
+
+struct LRUNode {
     int key;
     int val;
-    Node *next;
-    Node *prev;
-    Node(int k, int v)
-    {
+    LRUNode* next;
+    LRUNode* prev;
+    LRUNode(int k, int v) {
         val = v;
         next = nullptr;
         prev = nullptr;
     }
 };
 
-class LRUCache
-{
-public:
+class LRUCache {
+   public:
     int size, curr = 0;
-    unordered_map<int, Node *> mpp;
-    Node *head = new Node(-1, -1);
-    Node *tail = new Node(-1, -1);
-    LRUCache(int capacity)
-    {
+    unordered_map<int, LRUNode*> mpp;
+    LRUNode* head = new LRUNode(-1, -1);
+    LRUNode* tail = new LRUNode(-1, -1);
+    LRUCache(int capacity) {
         head->next = tail;
         tail->prev = head;
         size = capacity;
     }
 
-    int get(int key)
-    {
-        if (mpp.find(key) != mpp.end())
-        {
+    int get(int key) {
+        if (mpp.find(key) != mpp.end()) {
             mpp[key]->prev->next = mpp[key]->next;
             mpp[key]->next->prev = mpp[key]->prev;
             mpp[key]->next = tail;
@@ -89,10 +109,8 @@ public:
         return -1;
     }
 
-    void put(int key, int value)
-    {
-        if (mpp.find(key) != mpp.end())
-        {
+    void put(int key, int value) {
+        if (mpp.find(key) != mpp.end()) {
             mpp[key]->prev->next = mpp[key]->next;
             mpp[key]->next->prev = mpp[key]->prev;
             mpp[key]->next = tail;
@@ -102,16 +120,15 @@ public:
             mpp[key]->val = value;
             return;
         }
-        if (curr == size)
-        {
+        if (curr == size) {
             mpp.erase(head->next->key);
-            Node *first = head->next;
+            LRUNode* first = head->next;
             head->next = first->next;
             first->next->prev = head;
             curr--;
             delete first;
         }
-        Node *newNode = new Node(key, value);
+        LRUNode* newNode = new LRUNode(key, value);
         tail->prev->next = newNode;
         newNode->prev = tail->prev;
         tail->prev = newNode;
@@ -128,109 +145,90 @@ public:
  * obj->put(key,value);
  */
 
-struct Node
-{
+struct Node {
     int key, val, freq;
     Node *prev, *next;
-    Node(int k, int v) : key(k), val(v), freq(1), prev(nullptr), next(nullptr) {}
+    Node(int k, int v)
+        : key(k), val(v), freq(1), prev(nullptr), next(nullptr) {}
 };
 
-struct DLL
-{
+struct DLL {
     Node *head, *tail;
-    DLL()
-    {
+    DLL() {
         head = new Node(-1, -1);
         tail = new Node(-1, -1);
         head->next = tail;
         tail->prev = head;
     }
 
-    void addBack(Node *node)
-    {
+    void addBack(Node* node) {
         node->next = tail;
         node->prev = tail->prev;
         tail->prev->next = node;
         tail->prev = node;
     }
 
-    void remove(Node *node)
-    {
+    void remove(Node* node) {
         node->prev->next = node->next;
         node->next->prev = node->prev;
     }
 
-    bool empty()
-    {
-        return head->next == tail;
-    }
+    bool empty() { return head->next == tail; }
 
-    Node *popFront()
-    {
-        Node *node = head->next;
+    Node* popFront() {
+        Node* node = head->next;
         remove(node);
         return node;
     }
 };
 
-class LFUCache
-{
-public:
+class LFUCache {
+   public:
     int capacity, used = 0, minFreq = 0;
-    unordered_map<int, Node *> nodes;
-    unordered_map<int, DLL *> freqList;
+    unordered_map<int, Node*> nodes;
+    unordered_map<int, DLL*> freqList;
 
     LFUCache(int cap) : capacity(cap) {}
 
-    DLL *getList(int f)
-    {
-        if (!freqList.count(f))
-            freqList[f] = new DLL();
+    DLL* getList(int f) {
+        if (!freqList.count(f)) freqList[f] = new DLL();
         return freqList[f];
     }
 
-    void touch(Node *node)
-    {
+    void touch(Node* node) {
         int f = node->freq;
         freqList[f]->remove(node);
-        if (f == minFreq && freqList[f]->empty())
-            minFreq++;
+        if (f == minFreq && freqList[f]->empty()) minFreq++;
 
         node->freq++;
         getList(node->freq)->addBack(node);
     }
 
-    int get(int key)
-    {
-        if (!nodes.count(key))
-            return -1;
-        Node *node = nodes[key];
+    int get(int key) {
+        if (!nodes.count(key)) return -1;
+        Node* node = nodes[key];
         touch(node);
         return node->val;
     }
 
-    void put(int key, int value)
-    {
-        if (capacity == 0)
-            return;
+    void put(int key, int value) {
+        if (capacity == 0) return;
 
-        if (nodes.count(key))
-        {
-            Node *node = nodes[key];
+        if (nodes.count(key)) {
+            Node* node = nodes[key];
             node->val = value;
             touch(node);
             return;
         }
 
-        if (used == capacity)
-        {
-            Node *victim = freqList[minFreq]->popFront();
+        if (used == capacity) {
+            Node* victim = freqList[minFreq]->popFront();
             nodes.erase(victim->key);
             delete victim;
             used--;
         }
 
-        Node *node = new Node(key, value);
+        Node* node = new Node(key, value);
         nodes[key] = node;
         minFreq = 1;
         getList(1)->addBack(node);
@@ -244,20 +242,22 @@ public:
  * obj->put(key,value);
  */
 
-
-int main()
-{
+int main() {
     int n;
     cin >> n;
     vector<int> arr(n);
-    for (int &a : arr)
-        cin >> a;
+    for (int& a : arr) cin >> a;
     int k;
     cin >> k;
     vector<int> res = maxSlidingWindow(arr, k);
-    for (int &a : res)
-        cout << a << " ";
+    for (int& a : res) cout << a << " ";
     cout << endl;
+    cout << "------------------" << endl;
+    cin >> n;
+    vector<vector<int>> mat(n, vector<int>(n));
+    for (auto& it : mat)
+        for (int& a : it) cin >> a;
+    cout << celebrity(mat) << endl;
     cout << "------------------" << endl;
     return 0;
 }
